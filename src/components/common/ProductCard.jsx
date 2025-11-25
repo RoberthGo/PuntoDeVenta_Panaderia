@@ -53,6 +53,7 @@ function ProductCard({  idProducto, nombre, precio, weight, descripcion, imageUr
                 {/* Mostramos el peso si lo tienes, sino puedes mostrar el stock */}
                 <span className="product-weight">{weight || `Stock: ${stock}`}</span>
                 
+                {/* Testing */}
                 {/* Botón de 'Add' o el ícono de 'Check' */}
                 <div className="add-button-container">
                     {isSelected ? (
