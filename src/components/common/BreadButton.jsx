@@ -1,5 +1,6 @@
 import './BreadButton.css';
 
+// Cambiar para que sea el boton y agrege el producto a la tabla de ventas cuando se clickea
 function BreadButton({ imageUrl, name, price, onClick }) {
     return (
         <button className="bread-button" onClick={onClick}>
