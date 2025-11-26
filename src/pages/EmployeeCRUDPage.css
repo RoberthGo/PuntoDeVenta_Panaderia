@@ -1,0 +1,69 @@
+.employees-view-container {
+    padding: 20px 30px;
+    background-color: #f5f7fa; /* Fondo general muy claro */
+    min-height: 100vh;
+}
+
+/* --- Barra de Búsqueda Superior (Si no está en el nav lateral) --- */
+.top-search-bar {
+    padding: 15px 0;
+    margin-bottom: 20px;
+    /* Estilos para el input de búsqueda */
+}
+
+.search-input {
+    width: 300px;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* --- Cabecera y Acciones --- */
+.header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.employee-count {
+    font-size: 1.8em;
+    font-weight: 700;
+    color: #333;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-button {
+    background-color: #fff;
+    color: #555;
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.add-candidate-button {
+    background-color: #ff6a3c; /* Color naranja de la imagen */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 4px 6px rgba(255, 106, 60, 0.4);
+}
+
+/* --- Cuadrícula de Empleados --- */
+.employee-grid {
+    display: grid;
+    /* 3 columnas por fila, como se ve en la imagen */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+    gap: 25px;
+}

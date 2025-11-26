@@ -1,0 +1,48 @@
+.sidebar {
+    width: 250px;
+    background-color: #ffffff;
+    border-right: 1px solid #eee;
+    padding: 20px 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+    flex-shrink: 0;
+}
+
+.app-logo {
+    font-size: 1.8em;
+    font-weight: 700;
+    color: #ff6a3c;
+    margin: 0 0 40px 20px;
+}
+
+.nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: #555;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    font-size: 1em;
+}
+
+.nav-item:hover {
+    background-color: #f7f7f7;
+}
+
+.nav-item.active {
+    background-color: #fff4f1;
+    color: #ff6a3c;
+    font-weight: 600;
+    border-left: 4px solid #ff6a3c; 
+    padding-left: 16px;
+}
+
+.nav-icon {
+    margin-right: 12px;
+    font-size: 1.2em;
+}

@@ -21,6 +21,7 @@ function ProductCard({  idProducto, nombre, precio, weight, descripcion, imageUr
     };
 
     return (
+        <>
         <div 
             className={`product-card ${isSelected ? 'selected' : ''} ${!isAvailable ? 'unavailable' : ''}`}
             onClick={handleInfoClick} 
@@ -71,6 +72,7 @@ function ProductCard({  idProducto, nombre, precio, weight, descripcion, imageUr
             </div>
             
         </div>
+        </>
     );
 }
 

@@ -1,0 +1,97 @@
+.employee-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.employee-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+
+.card-header {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.card-options .option-button {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #999;
+}
+
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.employee-name {
+    font-size: 1.1em;
+    font-weight: 600;
+    margin: 5px 0 3px 0;
+    color: #333;
+}
+
+.employee-role-tag {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.admin-role {
+    color: #e85d04;
+    font-weight: bold;
+}
+
+.details-section {
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+    margin-top: auto;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.85em;
+    color: #555;
+}
+
+.detail-item .icon {
+    font-size: 1.1em;
+    margin-right: 8px;
+}
+
+.detail-label {
+    font-weight: 500;
+    margin-right: 5px;
+}
+
+.detail-value {
+    font-weight: normal;
+}
+
+.internal-id {
+    color: #999;
+    font-size: 0.8em;
+    padding-top: 5px;
+    border-top: 1px dashed #eee;
+    margin-top: 5px;
+}
