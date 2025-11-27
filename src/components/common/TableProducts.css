@@ -1,0 +1,273 @@
+/* Contenedor principal de la fila */
+.tabla-products {
+    display: grid;
+    grid-template-columns: 60px 1.5fr 1fr 0.7fr 1fr;
+    align-items: center;
+
+    background: #1c1a19; /* negro café */
+    padding: 14px 18px;
+    border-radius: 14px;
+    margin-bottom: 12px;
+    transition: all 0.25s ease;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Hover elegante */
+.tabla-products:hover {
+    transform: translateY(-3px);
+    background: #262320; /* café oscuro */
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+}
+
+
+/* --- FOTO --- */
+.foto img {
+    width: 55px;
+    height: 55px;
+    object-fit: cover;
+
+    border-radius: 10px;
+    border: 2px solid #3a2f2a; /* borde café */
+    background: #000;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+}
+
+
+/* --- DESCRIPCIÓN Y NOMBRE (INFO) --- */
+.descripccion {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.descripccion p:first-child {
+    color: #e8e1dd; /* blanco cálido */
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.descripccion p:last-child {
+    color: #a39b95;
+    font-size: 0.8rem;
+}
+
+
+/* --- PRECIO / CANTIDAD / TOTAL --- */
+.precio, .cantidad, .total {
+    text-align: center;
+}
+
+.precio span,
+.cantidad span,
+.total span {
+    font-size: 0.75rem;
+    color: #9a928d;
+}
+
+.precio p {
+    color: #d4a373; /* café dorado */
+}
+
+.cantidad p {
+    color: #fff;
+    font-weight: 600;
+}
+
+.total p {
+    color: #77dd77; /* verde limpio */
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+
+/* --- TOOLTIP PARA DESCRIPCIÓN COMPLETA AL HOVER --- */
+
+.tabla-products::after {
+    content: attr(data-descripcion); /* usa texto desde el HTML */
+    position: absolute;
+
+    left: 50%;
+    top: -10px;
+    transform: translate(-50%, -100%);
+
+    background: #2b2725;
+    color: #f5eee9;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    white-space: normal;
+    width: 260px;
+
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    text-align: center;
+
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+}
+
+
+/* --- CONTENEDOR PRINCIPAL --- */
+.contenedor-principal-datlle-venta {
+    background: #1b1918; /* negro café */
+    padding: 22px;
+    border-radius: 16px;
+    width: 95%;
+    color: #e6e0db;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Título */
+.titulo-contenedor {
+    margin-bottom: 18px;
+    text-align: center;
+    font-size: 1.5rem;
+    color: #f1ebe7;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+
+
+/* --- ENCABEZADO DE TABLA --- */
+.encabezado-content {
+    display: grid;
+    grid-template-columns: 60px 1.5fr 1fr 0.7fr 1fr;
+    background: #24211f;
+    padding: 12px 14px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.encabezado-content div {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #c2b9b3;
+}
+
+
+
+/* --- LISTA DE ITEMS --- */
+.contenedor-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sin-products {
+    text-align: center;
+    padding: 18px 0;
+    font-size: 0.9rem;
+    color: #948d88;
+}
+
+
+
+/* --- RESUMEN DE TOTALES --- */
+.detalle-venta-content {
+    background: #1e1b1a;
+    padding: 18px;
+    margin-top: 25px;
+    border-radius: 14px;
+
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.detalle-venta div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.detalle-venta span {
+    font-size: 0.95rem;
+}
+
+/* Subtotal */
+.subtotal {
+    color: #e8e1dd;
+}
+
+/* IVA */
+.impuestos {
+    color: #d4c9c2;
+}
+
+/* Total final */
+.precio-final {
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin-top: 10px;
+}
+
+.precio-final span:first-child {
+    font-weight: 700;
+}
+
+.precio-final span:last-child {
+    font-weight: 700;
+    color: #77dd77; /* verde bonito */
+    font-size: 1.2rem;
+}
+
+
+
+/* --- BOTÓN FINAL --- */
+.botones {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+.btn-venta {
+    padding: 12px 24px;
+    border-radius: 12px;
+
+    background: #6a4f3b; /* café cálido */
+    color: #fff3e6;
+    border: none;
+
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+
+    transition: all 0.25s ease;
+}
+
+.btn-venta:hover {
+    background: #8a6a50;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+}
+
+.btn-venta:active {
+    transform: scale(0.97);
+}
+
+/* mostrar tooltip en hover */
+.tabla-products:hover::after {
+    opacity: 1;
+}
+
+
+/* --- RESPONSIVE --- */
+
+@media (max-width: 650px) {
+    .tabla-products {
+        grid-template-columns: 45px 1.5fr 1fr;
+        grid-template-rows: auto auto;
+        gap: 10px;
+    }
+
+    .precio,
+    .cantidad,
+    .total {
+        text-align: left;
+    }
+}
