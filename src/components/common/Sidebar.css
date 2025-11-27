@@ -1,0 +1,105 @@
+/* Variables para una fácil gestión de colores */
+:root {
+    --color-dark: #121212; /* Negro muy oscuro */
+    --color-brown-base: #5D4037; /* Café oscuro elegante */
+    --color-brown-accent: #A1887F; /* Café más claro para detalles */
+    --color-text-light: #F0F0F0; /* Texto claro */
+    --color-text-muted: #BDBDBD; /* Texto atenuado */
+}
+
+/* 1. Estilos Generales del Sidebar */
+.sidebar {
+    width: 250px; /* Ancho fijo para el sidebar */
+    min-height: 100vh; /* Ocupa toda la altura de la vista */
+    background-color: var(--color-dark);
+    color: var(--color-text-light);
+    padding: 24px 0;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.4); /* Sombra sutil */
+    font-family: 'Inter', sans-serif; /* Usamos una fuente moderna y limpia */
+}
+
+/* 2. Estilo del Logo/Título de la Aplicación */
+.app-logo {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-brown-accent); /* Resaltamos el título con un café claro */
+    margin: 0 20px 30px 20px; /* Margen para separarlo de los elementos de navegación */
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--color-brown-base); /* Línea divisoria */
+    letter-spacing: 0.5px;
+}
+
+/* 3. Estilos de la Lista de Navegación */
+.nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* 4. Estilos de los Elementos de Navegación */
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    margin: 4px 0;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--color-text-muted); /* Texto atenuado por defecto */
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    /* La propiedad 'transition' es CLAVE para la animación minimalista */
+    border-radius: 4px; /* Bordes ligeramente redondeados */
+    position: relative;
+    overflow: hidden; /* Asegura que el borde lateral no se desborde */
+}
+
+/* 5. Estado Activo (Elemento Seleccionado) */
+.nav-item.active {
+    color: var(--color-text-light); /* Color de texto más brillante para el activo */
+    background-color: var(--color-brown-base); /* Fondo de color café oscuro */
+    font-weight: 600;
+}
+
+/* Borde lateral elegante para el elemento activo */
+.nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px; /* Grosor del borde */
+    background-color: var(--color-brown-accent); /* Color del acento café */
+    border-radius: 0 4px 4px 0;
+}
+
+/* 6. Animación al Pasar el Cursor (Hover Effect) */
+
+/* El fondo se ilumina un poco y el elemento se desplaza ligeramente */
+.nav-item:not(.active):hover {
+    background-color: rgba(255, 255, 255, 0.05); /* Un ligero tinte blanco transparente */
+    color: var(--color-text-light); /* El texto se ilumina */
+    transform: translateX(4px); /* Se mueve 4px a la derecha */
+}
+
+/* Borde lateral sutil al pasar el cursor (efecto "glow" o indicador) */
+.nav-item:not(.active):hover::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px; /* Grosor más fino que el activo */
+    background-color: var(--color-brown-accent);
+    opacity: 0.7;
+    transition: width 0.3s ease;
+}
+
+
+/* 7. Estilo de los Íconos */
+.nav-icon {
+    font-size: 1.2rem;
+    margin-right: 15px;
+    width: 24px; /* Asegura que todos los iconos tengan el mismo ancho */
+    text-align: center;
+    /* El color de los emojis se mantiene, pero si fueran iconos vectoriales (SVG/Font Awesome), 
+       heredarían el color del texto. */
+}

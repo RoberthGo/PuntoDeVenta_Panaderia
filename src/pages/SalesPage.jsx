@@ -1,6 +1,7 @@
 import BreadButton from "../components/common/BreadButton";
 import ProductCard from "../components/common/ProductCard";
 import "./SalesPage.css";
+import Table from "../components/common/TableProducts"
 
 const PRODUCTOS_MOCK = [
     {
@@ -101,6 +102,10 @@ function SalesPage() {
                         stock={product.stock}
                     />
                 ))}
+            </div>
+            
+            <div className="seccion-tabla">
+                <Table />
             </div>
         </div>
     );
