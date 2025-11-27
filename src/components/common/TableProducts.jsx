@@ -1,5 +1,5 @@
 import React from 'react';
-import "../common/TableProducts.css"
+import "../common/CSS/TableProducts.css"
 // MOCK DATA para visualizar el diseño de un producto seleccionado
 const MOCK_SALES_ITEMS = [
     {
