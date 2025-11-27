@@ -9,6 +9,11 @@ function Sidebar() {
 
             <ul className="nav-list">
                 <li className="nav-item active">
+                    <span className="nav-icon"></span>
+                    Home
+                </li>
+
+                <li className="nav-item">
                     <span className="nav-icon">🛒</span>
                     Ventas
                 </li>

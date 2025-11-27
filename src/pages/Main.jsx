@@ -22,6 +22,7 @@ function Main() {
             <MainContent>
                 {/* Página por defecto: Home */}
                 {/*Parte de leo @leneza41 */}
+                <SalesPage />
                 <div className="home-container" style={{ textAlign: 'center', padding: '40px' }}>
                     <h1 style={{ color: 'white' }}>Home</h1>
 
