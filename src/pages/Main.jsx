@@ -1,27 +1,45 @@
-import BreadButton from "../components/common/BreadButton";
-import ProductCard from "../components/common/ProductCard";
+import React from 'react';
 
+import Sidebar from '../components/common/Sidebar';
+import MainContent from '../components/common/MainContent';
+import './Main.css';
+
+import SalesPage from './SalesPage';
+//import ProductsPage from './ProductsPage';
+//import SalesChartPage from './SalesChartPage';
+//import SalesHistoryPage from './SalesHistoryPage';
+//import EmployeeCRUDPage from './EmployeeCRUDPage';
+//import AuditTablePage from './AuditTablePage';
 
 function Main() {
     return (
-        <div className="main-page-container">
-            <h1 style={{ color: "white", textAlign: "center" }}>
-                Seccion de inicio 
-            </h1>
+        <div className="dashboard-layout-container">
+
+            {/* Barra lateral (estática por ahora) */}
+            <Sidebar />
+
+            {/* Contenido principal */}
+            <MainContent>
+                {/* Página por defecto: Home */}
+                {/*Parte de leo @leneza41 */}
+                <div className="home-container" style={{ textAlign: 'center', padding: '40px' }}>
+                    <h1 style={{ color: 'white' }}>Home</h1>
+
+                    <img
+                        src="https://cdn-icons-png.flaticon.com/512/1946/1946436.png"
+                        alt="Home Icon"
+                        style={{
+                            width: '160px',
+                            filter: 'invert(1)',
+                            opacity: 0.9,
+                            marginTop: '20px'
+                        }}
+                    />
+                </div>
+            </MainContent>
+
         </div>
     );
 }
 
 export default Main;
-
-/*
-leo, vamos a hacer el frontend algo asi:
-vamos a tener el Main donde van a estar el sidebar y el main content
-el sidebar va a tener los links de navegacion
-el main content va a tener las paginas que se van a ir mostrando
-cada pagina va a ser un componente separado
-asi mantenemos todo ordenado y modularizado como debe ser.
-
-Robe no ha puesto los moldes asi que algunos atributos de la base de datos se van a tener que cambiar, pero segun yo la base ya esta
-solo falta agregar bien la navegacion entre paginas y poder testear cada componente por separado, por que eso no lo se hacer aun.
-*/

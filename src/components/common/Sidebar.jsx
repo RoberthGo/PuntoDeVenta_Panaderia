@@ -1,37 +1,44 @@
 import React from 'react';
 import './Sidebar.css';
 
-{/* Barra de navegacion o nav-bar @leneza41*/}
-function Sidebar({ sections, activeSectionId, onSectionClick }) {
-    
-    // Un simple mapa de iconos de ejemplo (reemplaza con tu librería de iconos)
-    const getIcon = (id) => {
-        const icons = {
-            ventas: '🛒',
-            productos: '📦',
-            grafico: '📊',
-            historial: '📜',
-            empleados: '👥',
-            auditoria: '🔒',
-        };
-        return icons[id] || '⚙️';
-    };
-    
+function Sidebar() {
     return (
         <nav className="sidebar">
-            <h1 className="app-logo">Panaderia Wum bao</h1> {/* Título de la App como en la imagen */}
+
+            <h1 className="app-logo">Panaderia Wum Bao</h1>
+
             <ul className="nav-list">
-                {sections.map(section => (
-                    <li 
-                        key={section.id} 
-                        className={`nav-item ${activeSectionId === section.id ? 'active' : ''}`}
-                        onClick={() => onSectionClick(section.id)}
-                    >
-                        <span className="nav-icon">{getIcon(section.id)}</span>
-                        {section.title}
-                    </li>
-                ))}
+                <li className="nav-item active">
+                    <span className="nav-icon">🛒</span>
+                    Ventas
+                </li>
+
+                <li className="nav-item">
+                    <span className="nav-icon">📦</span>
+                    Productos
+                </li>
+
+                <li className="nav-item">
+                    <span className="nav-icon">📊</span>
+                    Gráfico
+                </li>
+
+                <li className="nav-item">
+                    <span className="nav-icon">📜</span>
+                    Historial
+                </li>
+
+                <li className="nav-item">
+                    <span className="nav-icon">👥</span>
+                    Empleados
+                </li>
+
+                <li className="nav-item">
+                    <span className="nav-icon">🔒</span>
+                    Auditorías
+                </li>
             </ul>
+
         </nav>
     );
 }
