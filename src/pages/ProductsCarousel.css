@@ -1,0 +1,83 @@
+.sales-page-container {
+    background-color: #1a1a1a; 
+    padding: 30px;
+    min-height: 100vh;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.sales-page-container h1 {
+    color: white;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2em;
+    font-weight: 400;
+}
+
+.carousel-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    max-width: 100%;
+    position: relative;
+}
+
+.bread-carousel {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+}
+
+.bread-carousel-track {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.carousel-arrow {
+    background-color: rgba(255, 255, 255, 0.9);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 2.5em;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.carousel-arrow:hover:not(:disabled) {
+    background-color: var(--primary-color);
+    color: white;
+    transform: scale(1.1);
+}
+
+.carousel-arrow:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.carousel-arrow-left {
+    margin-right: 10px;
+}
+
+.carousel-arrow-right {
+    margin-left: 10px;
+}
+
+.bread-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px; 
+    justify-content: center;
+    overflow-x: hidden; 
+}
+
+.add-button {
+    display: none;
+}

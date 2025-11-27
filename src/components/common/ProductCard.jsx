@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './ProductCard.css';
+import BreadButton from './BreadButton';
 
 function ProductCard({  idProducto, nombre, precio, weight, descripcion, imageUrl, stock }) {
     const [isSelected, setIsSelected] = useState(false);
@@ -21,18 +22,15 @@ function ProductCard({  idProducto, nombre, precio, weight, descripcion, imageUr
     };
 
     return (
-        <>
         <div 
             className={`product-card ${isSelected ? 'selected' : ''} ${!isAvailable ? 'unavailable' : ''}`}
             onClick={handleInfoClick} 
         >
             <div className="product-info-top">
-                {/* Etiqueta de 'RECETA' o 'AGOTADO' */}
                 <span className="product-label">
-                    {!isAvailable ? 'AGOTADO' : descripcion ? 'INFO' : 'NUEVO'}
+                    {!isAvailable ? 'AGOTADO' : 'DISPONIBLE'}
                 </span>
                 
-                {/* Pop-up de Descripción/Ingredientes */}
                 {descripcion && (
                     <div className="ingredients-popup">
                         <p className="popup-text">
@@ -42,37 +40,14 @@ function ProductCard({  idProducto, nombre, precio, weight, descripcion, imageUr
                 )}
             </div>
 
-            {/* Componente principal de visualización del pan */}
             <BreadButton 
                 imageUrl={imageUrl} 
                 name={nombre} 
-                price={precio.toFixed(2)} // Formateamos el precio
+                price={precio.toFixed(2)}
+                weight={weight || `Stock: ${stock}`}
                 onClick={handleInfoClick} 
             />
-
-            <div className="product-actions-bottom">
-                {/* Mostramos el peso si lo tienes, sino puedes mostrar el stock */}
-                <span className="product-weight">{weight || `Stock: ${stock}`}</span>
-                
-                {/* Testing */}
-                {/* Botón de 'Add' o el ícono de 'Check' */}
-                <div className="add-button-container">
-                    {isSelected ? (
-                        <span className="check-mark">✔️</span> 
-                    ) : (
-                        <button 
-                            className={`add-button ${!isAvailable ? 'disabled' : ''}`} 
-                            onClick={handleAddClick} 
-                            disabled={!isAvailable}
-                        >
-                            {isAvailable ? 'Add' : '—'}
-                        </button>
-                    )}
-                </div>
-            </div>
-            
         </div>
-        </>
     );
 }
 

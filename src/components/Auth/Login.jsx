@@ -18,8 +18,8 @@ function Login({ onLogin }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Login: ', formData);
-    // Call onLogin to switch to Main page
-    onLogin();
+    // Call onLogin to switch to Main page and pass user data
+    onLogin(formData);
   };
 
   return (
@@ -32,7 +32,7 @@ function Login({ onLogin }) {
         
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
-            <label htmlFor="login">Usuariox</label>
+            <label htmlFor="login">Usuario</label>
             <input
               type="text"
               id="login"

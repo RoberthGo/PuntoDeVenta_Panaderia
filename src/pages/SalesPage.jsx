@@ -2,7 +2,6 @@ import BreadButton from "../components/common/BreadButton";
 import ProductCard from "../components/common/ProductCard";
 import "./SalesPage.css";
 
-// Datos simulados
 const PRODUCTOS_MOCK = [
     {
         idProducto: 1,
@@ -86,11 +85,9 @@ const PRODUCTOS_MOCK = [
     },
 ];
 
-function Main() {
+function SalesPage() {
     return (
         <div className="sales-page-container">
-            <h1 style={{color: 'white', textAlign: 'center'}}> Menu de panes Wum bao</h1>
-
             <div className="bread-grid">
                 {PRODUCTOS_MOCK.map(product => (
                     <ProductCard 
@@ -105,15 +102,8 @@ function Main() {
                     />
                 ))}
             </div>
-
-            <BreadButton 
-                imageUrl="https://th.bing.com/th/id/R.cf379560878e5cf74c383124bb013478?rik=yTH5vF2Vq52zyA&pid=ImgRaw&r=0" 
-                name="Cheems" 
-                price="41.69" 
-                onClick={() => alert('Bonk!')}
-            />
         </div>
     );
 }
 
-export default Main;
+export default SalesPage;
