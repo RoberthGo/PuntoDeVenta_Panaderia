@@ -1,80 +1,59 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './ProductCard.css';
 
-function ProductCard({  idProducto, nombre, precio, weight, descripcion, imageUrl, stock }) {
-    const [isSelected, setIsSelected] = useState(false);
+function ProductCard({ nombre, precio, weight, descripcion, imageUrl, stock }) {
 
+    // Datos básicos para mostrar (sin lógica ni eventos)
     const isAvailable = stock > 0;
 
-    const handleAddClick =(e) =>{
-        e.stopPropagation();
-        if(!isAvailable){
-            alert(`El producto ${nombre} esta agotado.`);
-            return;
-        }
-        console.log(`Agregando ${nombre} (ID: ${idProducto}) al carrito.`);
-        setIsSelected(!isSelected); 
-    };
-
-    const handleInfoClick = () => {
-        alert(`Información:\n${nombre} - $${precio.toFixed(2)}\nDescripción: ${descripcion || 'No hay descripción disponible'}\nStock: ${stock} unidades`);
-    };
-
     return (
-        <>
         <div 
-            className={`product-card ${isSelected ? 'selected' : ''} ${!isAvailable ? 'unavailable' : ''}`}
-            onClick={handleInfoClick} 
+            className={`product-card ${!isAvailable ? 'unavailable' : ''}`}
         >
             <div className="product-info-top">
-                {/* Etiqueta de 'RECETA' o 'AGOTADO' */}
+                {/* Etiqueta simple */}
                 <span className="product-label">
                     {!isAvailable ? 'AGOTADO' : descripcion ? 'INFO' : 'NUEVO'}
                 </span>
-                
-                {/* Pop-up de Descripción/Ingredientes */}
+
+                {/* Popup estático solo para visualizar */}
                 {descripcion && (
                     <div className="ingredients-popup">
                         <p className="popup-text">
-                            **Descripción:** {descripcion}
+                            <strong>Descripción:</strong> {descripcion}
                         </p>
                     </div>
                 )}
             </div>
 
-            {/* Componente principal de visualización del pan */}
-            <BreadButton 
-                imageUrl={imageUrl} 
-                name={nombre} 
-                price={precio.toFixed(2)} // Formateamos el precio
-                onClick={handleInfoClick} 
-            />
+            {/* Imagen y nombre */}
+            <div className="product-image-container">
+                <img src={imageUrl} alt={nombre} className="product-image" />
 
-            <div className="product-actions-bottom">
-                {/* Mostramos el peso si lo tienes, sino puedes mostrar el stock */}
-                <span className="product-weight">{weight || `Stock: ${stock}`}</span>
-                
-                {/* Testing */}
-                {/* Botón de 'Add' o el ícono de 'Check' */}
-                <div className="add-button-container">
-                    {isSelected ? (
-                        <span className="check-mark">✔️</span> 
-                    ) : (
-                        <button 
-                            className={`add-button ${!isAvailable ? 'disabled' : ''}`} 
-                            onClick={handleAddClick} 
-                            disabled={!isAvailable}
-                        >
-                            {isAvailable ? 'Add' : '—'}
-                        </button>
-                    )}
+                <div className="product-name">
+                    {nombre}
+                </div>
+
+                <div className="product-price">
+                    ${precio?.toFixed(2)}
                 </div>
             </div>
-            
+
+            {/* Parte inferior: peso o stock + botón dummy */}
+            <div className="product-actions-bottom">
+                <span className="product-weight">{weight || `Stock: ${stock}`}</span>
+
+                <div className="add-button-container">
+                    <button 
+                        className={`add-button ${!isAvailable ? 'disabled' : ''}`} 
+                        disabled={!isAvailable}
+                    >
+                        Add
+                    </button>
+                </div>
+            </div>
         </div>
-        </>
     );
 }
 
 export default ProductCard;
-    
