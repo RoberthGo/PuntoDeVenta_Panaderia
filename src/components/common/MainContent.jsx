@@ -1,5 +1,5 @@
 import React from 'react';
-import './MainContent.css';
+import './CSS/MainContent.css';
 
 function MainContent({children}) {
     return (

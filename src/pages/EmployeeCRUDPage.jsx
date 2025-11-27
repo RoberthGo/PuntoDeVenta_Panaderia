@@ -1,7 +1,7 @@
 import React from 'react';
 import EmployeeCard from '../components/common/EmployeeCard'; 
-import '../components/common/EmployeeCard.css';
-import './EmployeeCRUDPage.css';
+import '../components/common/CSS/EmployeeCard.css';
+import './CSS/EmployeeCRUDPage.css';
 
 // Datos de ejemplo simulados
 const EMPLOYEES_MOCK = [

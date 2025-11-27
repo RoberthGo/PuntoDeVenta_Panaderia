@@ -1,5 +1,5 @@
 import React from 'react';
-import './EmployeeCard.css'; 
+import './CSS/EmployeeCard.css'; 
 
 // iconos de ejemplo 
 const PhoneIcon = () => <span className="icon">📞</span>;

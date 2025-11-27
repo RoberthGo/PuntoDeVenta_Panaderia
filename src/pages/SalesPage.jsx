@@ -1,6 +1,5 @@
-import BreadButton from "../components/common/BreadButton";
 import ProductCard from "../components/common/ProductCard";
-import "./SalesPage.css";
+import "./CSS/SalesPage.css";
 import Table from "../components/common/TableProducts"
 
 // Datos simulados
@@ -106,7 +105,7 @@ function Main() {
                     />
                 ))}
             </div>
-            
+
             <div className="seccion-tabla">
                 <Table />
             </div>

@@ -2,7 +2,7 @@ import React from 'react';
 
 import Sidebar from '../components/common/Sidebar';
 import MainContent from '../components/common/MainContent';
-import './Main.css';
+import './CSS/Main.css';
 
 import SalesPage from './SalesPage';
 //import ProductsPage from './ProductsPage';
