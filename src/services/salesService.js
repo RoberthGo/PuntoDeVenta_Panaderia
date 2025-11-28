@@ -21,33 +21,16 @@ export const salesService = {
   },
 
   /**
-   * Get all sales
-   * @param {object} filters - Optional filters (date range, customer, etc.)
-   * @returns {Promise<Array>} List of sales
+   * Obtener todas las ventas
+   * @returns {Promise<Array>} Lista de ventas
    */
   getAllSales: async (filters = {}) => {
     try {
-      const queryParams = new URLSearchParams(filters).toString();
-      const endpoint = queryParams ? `/sales?${queryParams}` : '/sales';
+      const endpoint = '/Ventas';
       const response = await api.get(endpoint);
       return response;
     } catch (error) {
       console.error('Error fetching sales:', error);
-      throw error;
-    }
-  },
-
-  /**
-   * Get sale by ID
-   * @param {number} id - Sale ID
-   * @returns {Promise<object>} Sale data
-   */
-  getSaleById: async (id) => {
-    try {
-      const response = await api.get(`/sales/${id}`);
-      return response;
-    } catch (error) {
-      console.error(`Error fetching sale ${id}:`, error);
       throw error;
     }
   },
