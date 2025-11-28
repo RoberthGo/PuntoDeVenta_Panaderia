@@ -74,26 +74,28 @@ function AuditTablePage() {
                         <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>Fecha y Hora</th>
                                 <th>Usuario</th>
                                 <th>Acción</th>
-                                <th>Tabla</th>
-                                <th>Fecha</th>
-                                <th>Detalles</th>
+                                <th>ID Producto</th>
+                                <th>Valor Anterior</th>
+                                <th>Valor Nuevo</th>
                             </tr>
                         </thead>
                         <tbody>
                             {audits.map((audit) => (
                                 <tr key={audit.idAuditoria}>
                                     <td>{audit.idAuditoria}</td>
-                                    <td>{audit.nombreUsuario || audit.idUsuario}</td>
+                                    <td>{formatDate(audit.fechaHora)}</td>
+                                    <td>{audit.usuario}</td>
                                     <td>
                                         <span className={`action-badge action-${audit.accion?.toLowerCase()}`}>
                                             {audit.accion}
                                         </span>
                                     </td>
-                                    <td>{audit.tabla}</td>
-                                    <td>{formatDate(audit.fecha)}</td>
-                                    <td className="details-cell">{audit.detalles || 'N/A'}</td>
+                                    <td>{audit.idProducto || 'N/A'}</td>
+                                    <td className="details-cell">{audit.valorAnterior || '-'}</td>
+                                    <td className="details-cell">{audit.valorNuevo || '-'}</td>
                                 </tr>
                             ))}
                         </tbody>
