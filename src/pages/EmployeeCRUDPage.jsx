@@ -1,46 +1,71 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { employeeService } from '../services/employeeService';
+
 import EmployeeCard from '../components/common/EmployeeCard'; 
-import '../components/common/CSS/EmployeeCard.css';
-import './CSS/EmployeeCRUDPage.css';
 import FormEmpleado from '../components/common/FormEmpleado';
 
-import img1 from '../Images/img-1.jpg';
-// Datos de ejemplo simulados
-const EMPLOYEES_MOCK = [
-    { idEmpleado: 101, nombre: "Ricardo Cueva", telefono: "555-123-4567", rol: "Administrador", salario: 15000.00, fechaIngreso: "2020-07-27", imageUrl: img1 },
-    { idEmpleado: 102, nombre: "Elena Pérez", telefono: "555-987-6543", rol: "Empleado", salario: 8500.50, fechaIngreso: "2021-10-28", imageUrl: img1},
-    { idEmpleado: 103, nombre: "Javier López", telefono: "555-111-2222", rol: "Empleado", salario: 9200.00, fechaIngreso: "2022-09-06", imageUrl: img1},
-    // Agrega más empleados según sea necesario...
-];
+import './CSS/EmployeeCRUDPage.css';
+import '../components/common/CSS/EmployeeCard.css';
 
 function EmployeeCRUDPage() {
-    const totalEmployees = EMPLOYEES_MOCK.length;
+    const [employees, setEmployees] = useState([]); // Lista real de la API
+    const [showForm, setShowForm] = useState(false); // Controla visibilidad del form
+    const formRef = useRef(null); // Referencia para scroll
+    const [selectedEmployee, setSelectedEmployee] = useState(null); // Empleado a editar
 
-    const [showForm, setShowForm] = useState(false); // <- Controla visibilidad
-    const formRef = useRef(null); // <- Referencia para scroll
-    const [selectedEmployee, setSelectedEmployee] = useState(null); // Almacena empleado a editar
+    // Cargar empleados desde API al iniciar
+    useEffect(() => {
+        const fetchEmployees = async () => {
+            try {
+                const response = await employeeService.getAllEmployees();
+                setEmployees(response.data); // axios devuelve {data: [...]}
+            } catch (error) {
+                console.error('Error cargando empleados', error);
+            }
+        };
+        fetchEmployees();
+    }, []);
 
+    const totalEmployees = employees.length;
+
+    // Mostrar formulario para agregar nuevo empleado
     const handleShowForm = () => {
-        setShowForm(true); // Mostrar el form
-        setTimeout(() => {
-            // Scroll suave hacia el formulario
-            formRef.current?.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-    };
-
-     // Mostrar formulario para editar empleado
-    const handleEditEmployee = (employee) => {
-        setSelectedEmployee(employee); // Cargar datos en formulario
+        setSelectedEmployee(null); // limpiar formulario
         setShowForm(true);
         setTimeout(() => formRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
     };
 
+    // Mostrar formulario para editar empleado
+    const handleEditEmployee = (employee) => {
+        setSelectedEmployee(employee); // cargar datos en el form
+        setShowForm(true);
+        setTimeout(() => formRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
+    };
+
+    // Guardar o actualizar empleado (callback del form)
+    const handleSubmitForm = async (employeeData) => {
+        try {
+            if (selectedEmployee) {
+                // Actualizar
+                await employeeService.updateEmployee(selectedEmployee.idEmpleado, employeeData);
+            } else {
+                // Crear
+                await employeeService.createEmployee(employeeData);
+            }
+            // Refrescar lista de empleados
+            const response = await employeeService.getAllEmployees();
+            setEmployees(response.data);
+            setSelectedEmployee(null); // limpiar form
+        } catch (error) {
+            console.error('Error guardando empleado', error);
+        }
+    };
+
     return (
         <div className="employees-crud-view">
-            {/* 1. Cabecera y Botones de Acción (Reutilizando la estructura anterior) */}
+            {/* Cabecera y botones de acción */}
             <div className="header-actions">
                 <h2 className="employee-count">{totalEmployees} Empleados</h2>
-                
                 <div className="action-buttons">
                     <button onClick={handleShowForm} className="add-candidate-button">
                         + Agregar Empleado
@@ -50,21 +75,26 @@ function EmployeeCRUDPage() {
 
             {/* Cuadrícula de empleados */}
             <div className="employee-grid">
-                {EMPLOYEES_MOCK.map(emp => (
+                {employees.map(emp => (
                     <EmployeeCard
                         key={emp.idEmpleado}
                         employe={emp}
-                        onEdit={() => handleEditEmployee(emp)} // Pasamos función
+                        onEdit={() => handleEditEmployee(emp)}
                     />
                 ))}
             </div>
 
+            {/* Formulario oculto inicialmente */}
             <div
                 ref={formRef}
                 className="form-content"
                 style={{ display: showForm ? 'block' : 'none' }}
             >
-                <FormEmpleado key={selectedEmployee?.idEmpleado || 'new'} employee={selectedEmployee} />
+                <FormEmpleado
+                    key={selectedEmployee?.idEmpleado || 'new'}
+                    employee={selectedEmployee}
+                    onSubmit={handleSubmitForm}
+                />
             </div>
         </div>
     );
