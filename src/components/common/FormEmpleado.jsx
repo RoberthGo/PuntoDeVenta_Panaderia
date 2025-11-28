@@ -13,7 +13,13 @@ const FormEmpleado = ({ employee, onSubmit }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSubmit({ nombre, telefono, rol, salario, fechaIngreso });
+        onSubmit({
+            idEmpleado: employee?.idEmpleado,
+            nombre, 
+            telefono, 
+            rol, 
+            salario: parseFloat(salario) || 0 
+        });
     };
 
     return (

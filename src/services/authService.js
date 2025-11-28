@@ -26,9 +26,15 @@ export const authService = {
       
       console.log('Login response:', response);
       
-      // Store the entire response as user data
-      if (response) {
+      // Store user data and extract idUsuario
+      if (response && response.usuario) {
+        // Store the entire response
         localStorage.setItem('userData', JSON.stringify(response));
+        
+        // Store idUsuario separately for easy access
+        localStorage.setItem('idUsuario', response.usuario.idUsuario);
+        
+        console.log('Stored idUsuario:', response.usuario.idUsuario);
       }
       
       return response;
@@ -44,6 +50,7 @@ export const authService = {
   logout: async () => {
     try {
       localStorage.removeItem('userData');
+      localStorage.removeItem('idUsuario');
     } catch (error) {
       console.error('Logout error:', error);
       throw error;
@@ -57,6 +64,15 @@ export const authService = {
   getCurrentUser: () => {
     const userData = localStorage.getItem('userData');
     return userData ? JSON.parse(userData) : null;
+  },
+
+  /**
+   * Obtener idUsuario desde localStorage
+   * @returns {number|null} User ID
+   */
+  getUserId: () => {
+    const idUsuario = localStorage.getItem('idUsuario');
+    return idUsuario ? parseInt(idUsuario, 10) : null;
   },
 
   /**
