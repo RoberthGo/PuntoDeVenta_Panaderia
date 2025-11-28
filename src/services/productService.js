@@ -11,7 +11,7 @@ export const productService = {
    */
   getAllProducts: async () => {
     try {
-      const response = await api.get('/api/Productos');
+      const response = await api.get('/Productos');
       return response;
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -26,7 +26,7 @@ export const productService = {
    */
   getProductById: async (id) => {
     try {
-      const response = await api.get(`api/Productos/${id}`);
+      const response = await api.get(`/Productos/${id}`);
       return response;
     } catch (error) {
       console.error(`Error fetching product ${id}:`, error);
@@ -41,7 +41,7 @@ export const productService = {
    */
   createProduct: async (productData) => {
     try {
-      const response = await api.post('/api/Productos', productData);
+      const response = await api.post('/Productos', productData);
       return response;
     } catch (error) {
       console.error('Error creating product:', error);
@@ -57,7 +57,7 @@ export const productService = {
    */
   updateProduct: async (id, productData) => {
     try {
-      const response = await api.put(`/products/${id}`, productData);
+      const response = await api.put(`/Productos/${id}`, productData);
       return response;
     } catch (error) {
       console.error(`Error updating product ${id}:`, error);
@@ -72,7 +72,7 @@ export const productService = {
    */
   deleteProduct: async (id) => {
     try {
-      const response = await api.delete(`/products/${id}`);
+      const response = await api.delete(`/Productos/${id}`);
       return response;
     } catch (error) {
       console.error(`Error deleting product ${id}:`, error);
@@ -87,7 +87,7 @@ export const productService = {
    */
   getProductsByCategory: async (category) => {
     try {
-      const response = await api.get(`/products/category/${category}`);
+      const response = await api.get(`/Productos/Categoria/${category}`);
       return response;
     } catch (error) {
       console.error(`Error fetching products for category ${category}:`, error);

@@ -48,7 +48,7 @@ const SalesItemCard = ({ item , onRemove}) => {
 };
 
 // Componente principal del panel de resumen de ventas
-const SalesOrderPanel = ({ items = [], onRemove }) => {
+const SalesOrderPanel = ({ items = [], onRemove, onFinalizeSale }) => {
 
     // Si no llegan items, prevenimos errores
     const safeItems = items || [];
@@ -59,8 +59,9 @@ const SalesOrderPanel = ({ items = [], onRemove }) => {
     const finalTotal = subtotal + tax;
 
     const handleSale = () => {
-        // Lógica para finalizar la venta
-        
+        if (onFinalizeSale) {
+            onFinalizeSale();
+        }
     }
 
     return (
@@ -105,7 +106,7 @@ const SalesOrderPanel = ({ items = [], onRemove }) => {
             </div>
 
             <div className="botones">
-                <button className="btn-venta">
+                <button className="btn-venta" onClick={handleSale}>
                     Finalizar Venta
                 </button>
             </div>

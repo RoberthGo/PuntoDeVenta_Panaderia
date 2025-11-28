@@ -6,9 +6,17 @@ function ProductCard({ idProducto, nombre, precio, descripcion, imageUrl, stock,
     // Datos básicos para mostrar (sin lógica ni eventos)
     const isAvailable = stock > 0;
 
+    const handleCardClick = () => {
+        if (isAvailable && onAdd) {
+            onAdd();
+        }
+    };
+
     return (
         <div 
             className={`product-card ${!isAvailable ? 'unavailable' : ''}`}
+            onClick={handleCardClick}
+            style={{ cursor: isAvailable ? 'pointer' : 'not-allowed' }}
         >
             <div className="product-info-top">
                 {/* Etiqueta simple */}
@@ -47,7 +55,10 @@ function ProductCard({ idProducto, nombre, precio, descripcion, imageUrl, stock,
                     <button 
                         className={`add-button ${!isAvailable ? 'disabled' : ''}`} 
                         disabled={!isAvailable}
-                        onClick={() => onAdd(idProducto)}   // ⬅️ AQUÍ SE LLAMA LA FUNCIÓN
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onAdd();
+                        }}
                     >
                         Add
                     </button>

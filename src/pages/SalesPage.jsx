@@ -1,94 +1,49 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProductCard from "../components/common/ProductCard";
-import Table from "../components/common/TableProducts"
+import Table from "../components/common/TableProducts";
 import "./CSS/SalesPage.css";
+import { productService } from "../services/productService";
+import { salesService } from "../services/salesService";
 
 import img1 from "../Images/img-1.jpg";
 
-
-// Datos simulados
-const PRODUCTOS_MOCK = [
-    {
-        idProducto: 1,
-        nombre: "Whole Grain Spelt",
-        descripcion: null,
-        precio: 6.00,
-        stock: 15,
-        costo: 3.50,
-        imageUrl: img1,
-    },
-    {
-        idProducto: 2,
-        nombre: "Mt Ida Multigrain",
-        descripcion: "Ingredientes: harina integral orgánica, agua filtrada, avena orgánica, cebada orgánica, levadura, sal.",
-        precio: 6.00,
-        stock: 10,
-        costo: 3.00,
-        imageUrl: img1,
-    },
-    {
-        idProducto: 3,
-        nombre: "Four Seed Whole Wheat",
-        descripcion: null,
-        precio: 5.00,
-        stock: 22,
-        costo: 2.50,
-        imageUrl: img1,
-    },
-    {
-        idProducto: 4,
-        nombre: "Bagel Multigrain",
-        descripcion: "Panecillos de granos múltiples.",
-        precio: 3.00,
-        stock: 5,
-        costo: 1.50,
-        imageUrl: img1,
-    },
-    {
-        idProducto: 5,
-        nombre: "Bagel Sesame",
-        descripcion: null,
-        precio: 3.00,
-        stock: 0,
-        costo: 1.50,
-        imageUrl: img1,
-    },
-    {
-        idProducto: 6,
-        nombre: "Puff Pastry (Strawberry)",
-        descripcion: "Hojaldre con fresas frescas.",
-        precio: 6.00,
-        stock: 12,
-        costo: 4.00,
-        imageUrl: img1,
-    },
-    {
-        idProducto: 7,
-        nombre: "French Baguette",
-        descripcion: null,
-        precio: 6.00,
-        stock: 30,
-        costo: 3.50,
-        imageUrl: img1,
-    },
-    {
-        idProducto: 8,
-        nombre: "Puff Pastry (Raspberry)",
-        descripcion: "Hojaldre con frambuesas.",
-        precio: 6.00,
-        stock: 8,
-        costo: 4.00,
-        imageUrl: img1,
-    },
-];
-
 function Main() {
-    const [productos, setProductos] = useState(PRODUCTOS_MOCK);
+    const [productos, setProductos] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [cartItems, setCartItems] = useState([]);
 
-    const handleAddToCart = (idProducto) => {
+    useEffect(() => {
+        let isMounted = true;
+        const fetchProducts = async () => {
+            try {
+                setLoading(true);
+                setError(null);
+                const data = await productService.getAllProducts();
+                const withImages = (Array.isArray(data) ? data : []).map(p => ({
+                    ...p,
+                    imageUrl: p.imageUrl || img1,
+                }));
+                if (isMounted) setProductos(withImages);
+            } catch (err) {
+                console.error('Failed to load products for SalesPage:', err);
+                if (isMounted) setError('No se pudieron cargar los productos.');
+            } finally {
+                if (isMounted) setLoading(false);
+            }
+        };
+        fetchProducts();
+        return () => { isMounted = false; };
+    }, []);
 
-        // Reducir stock
+    const handleAddToCart = (idProducto) => {
+        // Verificar stock disponible primero
+        const product = productos.find(p => p.idProducto === idProducto);
+        if (!product || product.stock <= 0) {
+            return;
+        }
+
+        // Reducir stock localmente
         setProductos(prev =>
             prev.map(p =>
                 p.idProducto === idProducto && p.stock > 0
@@ -96,9 +51,6 @@ function Main() {
                     : p
             )
         );
-
-        const product = productos.find(p => p.idProducto === idProducto);
-        if (!product || product.stock <= 0) return;
 
         // Agregar a carrito o aumentar cantidad
         setCartItems(prevCart => {
@@ -141,29 +93,76 @@ function Main() {
         });
     };
 
+    const handleFinalizeSale = async () => {
+        if (cartItems.length === 0) {
+            alert('El carrito está vacío. Agrega productos antes de finalizar la venta.');
+            return;
+        }
+
+        try {
+            // Transformar cartItems al formato requerido por la API
+            const saleData = {
+                idEmpleado: 1, // TODO: Obtener del contexto de autenticación
+                productos: cartItems.map(item => ({
+                    idProducto: item.idProducto,
+                    cantidad: item.cantidad,
+                    precioUnitario: item.precio
+                }))
+            };
+
+            const response = await salesService.createSale(saleData);
+            console.log('Venta registrada exitosamente:', response);
+            alert('¡Venta finalizada con éxito!');
+            
+            // Limpiar el carrito después de la venta exitosa
+            setCartItems([]);
+            
+            // Opcional: Recargar productos para actualizar stock desde el servidor
+            const data = await productService.getAllProducts();
+            const withImages = (Array.isArray(data) ? data : []).map(p => ({
+                ...p,
+                imageUrl: p.imageUrl || img1,
+            }));
+            setProductos(withImages);
+        } catch (err) {
+            console.error('Error al finalizar la venta:', err);
+            alert('Error al procesar la venta. Intenta nuevamente.');
+        }
+    };
+
     return (
         <div className="sales-page-container">
             <h1 style={{color: 'white', textAlign: 'center'}}> Menu de panes Wum bao</h1>
 
-            <div className="bread-grid">
-                {productos.map(product => (
-                    <ProductCard 
-                        key={product.idProducto}   
-                        idProducto={product.idProducto}
-                        nombre={product.nombre}
-                        precio={product.precio}
-                        descripcion={product.descripcion}
-                        imageUrl={product.imageUrl}
-                        stock={product.stock}
-                        onAdd={() => handleAddToCart(product.idProducto)}
-                    />
-                ))}
-            </div>
+            {loading && (
+                <p style={{ color: 'white', textAlign: 'center' }}>Cargando productos…</p>
+            )}
+            {error && (
+                <p style={{ color: 'tomato', textAlign: 'center' }}>{error}</p>
+            )}
+
+            {!loading && !error && (
+                <div className="bread-grid">
+                    {productos.map(product => (
+                        <ProductCard 
+                            key={product.idProducto}
+                            idProducto={product.idProducto}
+                            nombre={product.nombre}
+                            precio={product.precio}
+                            descripcion={product.descripcion}
+                            imageUrl={product.imageUrl || img1}
+                            stock={product.stock}
+                            onAdd={() => handleAddToCart(product.idProducto)}
+                        />
+                    ))}
+                </div>
+            )}
 
             <div className="seccion-tabla">
                 <Table 
                     items={cartItems}
                     onRemove={handleRemoveFromCart}
+                    onFinalizeSale={handleFinalizeSale}
                 />
             </div>
         </div>

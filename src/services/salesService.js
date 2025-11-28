@@ -12,7 +12,7 @@ export const salesService = {
    */
   createSale: async (saleData) => {
     try {
-      const response = await api.post('/sales', saleData);
+      const response = await api.post('/Ventas/Registrar', saleData);
       return response;
     } catch (error) {
       console.error('Error creating sale:', error);

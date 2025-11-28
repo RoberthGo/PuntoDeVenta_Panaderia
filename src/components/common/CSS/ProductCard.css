@@ -94,7 +94,8 @@ img{
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.2s;
+    transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 .add-button {
@@ -104,10 +105,34 @@ img{
     font-size: 0.7em;
     cursor: pointer;
     font-weight: bold;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .add-button-container:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: #8B4513;
+    border-color: #FFD700;
+    transform: scale(1.1);
+}
+
+.add-button:disabled {
+    cursor: not-allowed;
+}
+
+.add-button-container:has(.add-button:disabled) {
+    opacity: 0.3;
+    cursor: not-allowed;
+    border-color: #555;
+}
+
+.add-button-container:has(.add-button:disabled):hover {
+    background-color: transparent;
+    border-color: #555;
+    transform: none;
 }
 
 .check-mark {
