@@ -56,8 +56,8 @@ function Sidebar({ onSelectPage }) {
                 </li>
 
                 <li
-                    className={`nav-item ${activeItem === "Auditorías" ? "active" : ""}`}
-                    onClick={() => handleClick("Auditorías")}
+                    className={`nav-item ${activeItem === "Auditorias" ? "active" : ""}`}
+                    onClick={() => handleClick("Auditorias")}
                 >
                     <span className="nav-icon">🔒</span>
                     Auditorías

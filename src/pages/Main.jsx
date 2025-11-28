@@ -9,6 +9,7 @@ import ProductsPage from './ProductsPage';
 import EmployeeCard from './EmployeeCRUDPage'; 
 import EmployeeCRUDPage from "./EmployeeCRUDPage";
 import SalesHistoryPage from "./SalesHistoryPage";
+import AuditTablePage from "./AuditTablePage";
 
 function Main() {
     const [selectedPage, setSelectedPage] = useState("Ventas");
@@ -24,6 +25,7 @@ function Main() {
             case "Productos": return <ProductsPage />;
             case "Empleados":  return <EmployeeCRUDPage />;
             case "Historial": return <SalesHistoryPage />;
+            case "Auditorias": return <AuditTablePage />;
             default: return <SalesPage />;
         }
     };
