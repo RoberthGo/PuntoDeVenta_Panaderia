@@ -1,42 +1,37 @@
-import React from 'react';
-
+import React, { useState } from "react";
 import Sidebar from '../components/common/Sidebar';
 import MainContent from '../components/common/MainContent';
 import './CSS/Main.css';
 
+{/*Imports de las paginas*/}
 import SalesPage from './SalesPage';
-//import ProductsPage from './ProductsPage';
-//import SalesChartPage from './SalesChartPage';
-//import SalesHistoryPage from './SalesHistoryPage';
-//import EmployeeCRUDPage from './EmployeeCRUDPage';
-//import AuditTablePage from './AuditTablePage';
+import ProductsPage from './ProductsPage';
 
 function Main() {
+    const [selectedPage, setSelectedPage] = useState("Ventas");
+
+    // Esta función recibe el pageName desde el Sidebar
+    const handleSelectPage = (pageName) => {
+        setSelectedPage(pageName);
+    };
+
+    // Aquí decides qué componente mostrar
+    const renderPage = () => {
+        switch (selectedPage) {
+            case "Productos": return <ProductsPage />;
+            default: return <SalesPage />;
+        }
+    };
+
     return (
         <div className="dashboard-layout-container">
 
-            {/* Barra lateral (estática por ahora) */}
-            <Sidebar />
+            {/* Sidebar manda a llamar handleSelectPage */}
+            <Sidebar onSelectPage={handleSelectPage} />
 
-            {/* Contenido principal */}
+            {/* Aquí se carga la página que toque */}
             <MainContent>
-                {/* Página por defecto: Home */}
-                {/*Parte de leo @leneza41 */}
-                <SalesPage />
-                <div className="home-container" style={{ textAlign: 'center', padding: '40px' }}>
-                    <h1 style={{ color: 'white' }}>Home</h1>
-
-                    <img
-                        src="https://cdn-icons-png.flaticon.com/512/1946/1946436.png"
-                        alt="Home Icon"
-                        style={{
-                            width: '160px',
-                            filter: 'invert(1)',
-                            opacity: 0.9,
-                            marginTop: '20px'
-                        }}
-                    />
-                </div>
+                {renderPage()}
             </MainContent>
 
         </div>
