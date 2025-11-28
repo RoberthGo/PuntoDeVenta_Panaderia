@@ -1,7 +1,6 @@
 import React from 'react';
 import ProductCard from "../components/common/ProductCard";
-import BreadButton from "../components/common/BreadButton";
-import "./SalesPage.css";
+import "./CSS/SalesPage.css";
 
 function Main() {
     return (
@@ -20,7 +19,6 @@ function Main() {
                     precio={6.00}
                     stock={15}
                     imageUrl="../Images/img-1.jpg"
-                    weight="390g"
                 />
 
                 {/* Producto 2 */}
@@ -29,9 +27,8 @@ function Main() {
                     nombre="Mt Ida Multigrain"
                     descripcion="Ingredientes: harina integral orgánica, agua filtrada, avena orgánica, cebada orgánica, levadura, sal."
                     precio={6.00}
-                    stock={10}
                     imageUrl="ruta/a/imagen2.jpg"
-                    weight="300g"
+                    stock={10}
                 />
 
                 {/* Producto 3 */}
@@ -40,9 +37,8 @@ function Main() {
                     nombre="Four Seed Whole Wheat"
                     descripcion={null}
                     precio={5.00}
-                    stock={22}
                     imageUrl="../Images/img-1.jpg"
-                    weight="420g"
+                    stock={22}
                 />
 
                 {/* Producto 4 */}
@@ -51,9 +47,8 @@ function Main() {
                     nombre="Bagel Multigrain"
                     descripcion="Panecillos de granos múltiples."
                     precio={3.00}
-                    stock={5}
                     imageUrl="../Images/img-1.jpg"
-                    weight="100g"
+                    stock={5}
                 />
 
                 {/* Producto 5 */}
@@ -62,9 +57,8 @@ function Main() {
                     nombre="Bagel Sesame"
                     descripcion={null}
                     precio={3.00}
-                    stock={0}
                     imageUrl="../Images/img-1.jpg"
-                    weight="100g"
+                    stock={0}
                 />
 
                 {/* Producto 6 */}
@@ -73,9 +67,8 @@ function Main() {
                     nombre="Puff Pastry (Strawberry)"
                     descripcion="Hojaldre con fresas frescas."
                     precio={6.00}
-                    stock={12}
                     imageUrl="../Images/img-1.jpg"
-                    weight="130g"
+                    stock={12}
                 />
 
                 {/* Producto 7 */}
@@ -84,9 +77,8 @@ function Main() {
                     nombre="French Baguette"
                     descripcion={null}
                     precio={6.00}
-                    stock={30}
                     imageUrl="../Images/img-1.jpg"
-                    weight="280g"
+                    stock={30}
                 />
 
                 {/* Producto 8 */}
@@ -95,9 +87,8 @@ function Main() {
                     nombre="Puff Pastry (Raspberry)"
                     descripcion="Hojaldre con frambuesas."
                     precio={6.00}
-                    stock={8}
                     imageUrl="../Images/img-1.jpg"
-                    weight="130g"
+                    stock={8}
                 />
 
             </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import './CSS/ProductCard.css';
 
-function ProductCard({ nombre, precio, weight, descripcion, imageUrl, stock }) {
+function ProductCard({ idProducto, nombre, precio, descripcion, imageUrl, stock, onAdd }) {
 
     // Datos básicos para mostrar (sin lógica ni eventos)
     const isAvailable = stock > 0;
@@ -13,7 +13,7 @@ function ProductCard({ nombre, precio, weight, descripcion, imageUrl, stock }) {
             <div className="product-info-top">
                 {/* Etiqueta simple */}
                 <span className="product-label">
-                    {!isAvailable ? 'AGOTADO' : descripcion ? 'INFO' : 'NUEVO'}
+                    {!isAvailable ? 'AGOTADO' : descripcion ? idProducto : 'NUEVO'}
                 </span>
 
                 {/* Popup estático solo para visualizar */}
@@ -41,12 +41,13 @@ function ProductCard({ nombre, precio, weight, descripcion, imageUrl, stock }) {
 
             {/* Parte inferior: peso o stock + botón dummy */}
             <div className="product-actions-bottom">
-                <span className="product-weight">{weight || `Stock: ${stock}`}</span>
+                <span className="product-weight">Stock: {stock}</span>
 
                 <div className="add-button-container">
                     <button 
                         className={`add-button ${!isAvailable ? 'disabled' : ''}`} 
                         disabled={!isAvailable}
+                        onClick={() => onAdd(idProducto)}   // ⬅️ AQUÍ SE LLAMA LA FUNCIÓN
                     >
                         Add
                     </button>
