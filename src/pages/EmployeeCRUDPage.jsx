@@ -18,9 +18,10 @@ function EmployeeCRUDPage() {
         const fetchEmployees = async () => {
             try {
                 const response = await employeeService.getAllEmployees();
-                setEmployees(response.data); // axios devuelve {data: [...]}
+                setEmployees(Array.isArray(response) ? response : []); // API devuelve array directo
             } catch (error) {
                 console.error('Error cargando empleados', error);
+                setEmployees([]); // Establecer array vacío en caso de error
             }
         };
         fetchEmployees();
@@ -42,22 +43,44 @@ function EmployeeCRUDPage() {
         setTimeout(() => formRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
     };
 
+    // Eliminar empleado
+    const handleDeleteEmployee = async (idEmpleado) => {
+        const confirmDelete = window.confirm('¿Estás seguro de que deseas eliminar este empleado?');
+        if (!confirmDelete) return;
+
+        try {
+            await employeeService.deleteEmployee(idEmpleado);
+            alert('Empleado eliminado exitosamente');
+            
+            // Refrescar lista de empleados
+            const response = await employeeService.getAllEmployees();
+            setEmployees(Array.isArray(response) ? response : []);
+        } catch (error) {
+            console.error('Error eliminando empleado', error);
+            alert('Error al eliminar el empleado. Intenta nuevamente.');
+        }
+    };
+
     // Guardar o actualizar empleado (callback del form)
     const handleSubmitForm = async (employeeData) => {
         try {
             if (selectedEmployee) {
                 // Actualizar
-                await employeeService.updateEmployee(selectedEmployee.idEmpleado, employeeData);
+                await employeeService.updateEmployee(employeeData);
+                alert('Empleado actualizado exitosamente');
             } else {
                 // Crear
                 await employeeService.createEmployee(employeeData);
+                alert('Empleado creado exitosamente');
             }
             // Refrescar lista de empleados
             const response = await employeeService.getAllEmployees();
-            setEmployees(response.data);
+            setEmployees(Array.isArray(response) ? response : []);
             setSelectedEmployee(null); // limpiar form
+            setShowForm(false); // Ocultar formulario
         } catch (error) {
             console.error('Error guardando empleado', error);
+            alert('Error al guardar el empleado. Intenta nuevamente.');
         }
     };
 
@@ -80,6 +103,7 @@ function EmployeeCRUDPage() {
                         key={emp.idEmpleado}
                         employe={emp}
                         onEdit={() => handleEditEmployee(emp)}
+                        onDelete={() => handleDeleteEmployee(emp.idEmpleado)}
                     />
                 ))}
             </div>

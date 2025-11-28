@@ -6,7 +6,7 @@ const PhoneIcon = () => <span className="icon">📞</span>;
 const CalendarIcon = () => <span className="icon">📅</span>;
 const DollarIcon = () => <span className="icon">💵</span>;
 
-function EmployeeCard({ employe, onEdit }) {
+function EmployeeCard({ employe, onEdit, onDelete }) {
     // Color para destacar el rol de Administrador
     const rolClass = employe.rol === 'Administrador' ? 'admin-role' : 'employee-role';
 
@@ -16,8 +16,11 @@ function EmployeeCard({ employe, onEdit }) {
                 {/* Menú de opciones de tarjeta (Editar/Eliminar) */}
                 <div className="card-options">
                     {/* Aquí pasamos la función onEdit desde el padre */}
-                    <button className="option-button" onClick={onEdit}>
+                    <button className="option-button edit-button" onClick={onEdit}>
                         Editar
+                    </button>
+                    <button className="option-button delete-button" onClick={onDelete}>
+                        Eliminar
                     </button>
                 </div>
             </div>
