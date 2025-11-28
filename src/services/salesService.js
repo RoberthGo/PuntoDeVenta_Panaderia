@@ -79,6 +79,30 @@ export const salesService = {
       throw error;
     }
   },
+
+  /**
+   * Get sales report by date range and product IDs
+   * @param {string} inicio - Start date (YYYY-MM-DD)
+   * @param {string} fin - End date (YYYY-MM-DD)
+   * @param {Array<number>} ids - Array of product IDs (optional)
+   * @returns {Promise<Array>} Sales report data
+   */
+  getReporteRango: async (inicio, fin, ids = []) => {
+    try {
+      let endpoint = `/Ventas/ReporteRango?inicio=${inicio}&fin=${fin}`;
+      
+      // Add product IDs as comma-separated string if provided
+      if (ids && ids.length > 0) {
+        endpoint += `&ids=${ids.join(',')}`;
+      }
+      
+      const response = await api.get(endpoint);
+      return response;
+    } catch (error) {
+      console.error('Error fetching sales report by range:', error);
+      throw error;
+    }
+  },
 };
 
 export default salesService;

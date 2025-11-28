@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { productService } from '../services/productService';
+import { salesService } from '../services/salesService';
 import './CSS/SalesChartPage.css';
 
 function SalesChartPage() {
@@ -48,22 +49,45 @@ function SalesChartPage() {
         setError(null);
 
         try {
-            // Mock data - Replace with actual API call
-            const mockData = selectedProducts.map(idProducto => {
+            // Calculate date ranges for both months
+            const [year1, month1Num] = month1.split('-');
+            const [year2, month2Num] = month2.split('-');
+            
+            // First day and last day of month1
+            const inicio1 = `${year1}-${month1Num}-01`;
+            const lastDay1 = new Date(parseInt(year1), parseInt(month1Num), 0).getDate();
+            const fin1 = `${year1}-${month1Num}-${lastDay1}`;
+            
+            // First day and last day of month2
+            const inicio2 = `${year2}-${month2Num}-01`;
+            const lastDay2 = new Date(parseInt(year2), parseInt(month2Num), 0).getDate();
+            const fin2 = `${year2}-${month2Num}-${lastDay2}`;
+
+            // Fetch sales data for both months
+            const [dataMes1, dataMes2] = await Promise.all([
+                salesService.getReporteRango(inicio1, fin1, selectedProducts),
+                salesService.getReporteRango(inicio2, fin2, selectedProducts)
+            ]);
+
+            // Combine data for each product
+            const combinedData = selectedProducts.map(idProducto => {
                 const product = products.find(p => p.idProducto === idProducto);
+                const salesMes1 = dataMes1.find(d => d.idProducto === idProducto);
+                const salesMes2 = dataMes2.find(d => d.idProducto === idProducto);
+                
                 return {
                     idProducto,
-                    nombre: product?.nombre || 'Producto',
-                    precio: product?.precio || 0,
-                    ventasMes1: Math.floor(Math.random() * 5000),
-                    ventasMes2: Math.floor(Math.random() * 5000)
+                    nombre: product?.nombre || salesMes1?.nombre || salesMes2?.nombre || 'Producto',
+                    precio: product?.precio || salesMes1?.precio || salesMes2?.precio || 0,
+                    ventasMes1: salesMes1?.totalVentas || 0,
+                    ventasMes2: salesMes2?.totalVentas || 0
                 };
             });
             
-            setSalesData(mockData);
+            setSalesData(combinedData);
         } catch (err) {
             console.error('Error generating chart:', err);
-            setError('Error al generar el reporte.');
+            setError('Error al generar el reporte. Por favor intenta de nuevo.');
         } finally {
             setLoading(false);
         }

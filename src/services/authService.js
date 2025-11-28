@@ -33,6 +33,7 @@ export const authService = {
         
         // Store idUsuario separately for easy access
         localStorage.setItem('idUsuario', response.usuario.idUsuario);
+        localStorage.setItem('user', nombreUsuario);
         
         console.log('Stored idUsuario:', response.usuario.idUsuario);
       }

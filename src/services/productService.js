@@ -72,25 +72,27 @@ export const productService = {
    */
   deleteProduct: async (id) => {
     try {
-      const response = await api.delete(`/Productos/${id}`);
+      // Get user from localStorage for audit purposes
+      const userJson = localStorage.getItem('user');
+      let usuario = '';
+      
+      if (userJson) {
+        try {
+          // const user = JSON.parse(userJson);
+          usuario = userJson || '';
+        } catch (e) {
+          console.error('Error parsing user from localStorage:', e);
+        }
+      }
+      
+      const response = await api.delete(`/Productos/${id}`, {
+        headers: {
+          'usuario': usuario,
+        }
+      });
       return response;
     } catch (error) {
       console.error(`Error deleting product ${id}:`, error);
-      throw error;
-    }
-  },
-
-  /**
-   * Get products by category
-   * @param {string} category - Category name
-   * @returns {Promise<Array>} List of products
-   */
-  getProductsByCategory: async (category) => {
-    try {
-      const response = await api.get(`/Productos/Categoria/${category}`);
-      return response;
-    } catch (error) {
-      console.error(`Error fetching products for category ${category}:`, error);
       throw error;
     }
   },
