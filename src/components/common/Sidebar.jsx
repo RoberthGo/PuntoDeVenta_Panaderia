@@ -32,8 +32,8 @@ function Sidebar({ onSelectPage }) {
                 </li>
 
                 <li
-                    className={`nav-item ${activeItem === "Gráfico" ? "active" : ""}`}
-                    onClick={() => handleClick("Gráfico")}
+                    className={`nav-item ${activeItem === "Comparativo" ? "active" : ""}`}
+                    onClick={() => handleClick("Comparativo")}
                 >
                     <span className="nav-icon">📊</span>
                     Gráfico
