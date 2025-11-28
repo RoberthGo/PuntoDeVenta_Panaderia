@@ -6,45 +6,32 @@ const PhoneIcon = () => <span className="icon">📞</span>;
 const CalendarIcon = () => <span className="icon">📅</span>;
 const DollarIcon = () => <span className="icon">💵</span>;
 
-function EmployeeCard({ idEmpleado, nombre, telefono, rol, salario, fechaIngreso, imageUrl }) {
-    
-    // Formatear la fecha de ingreso
-    const formattedDate = new Date(fechaIngreso).toLocaleDateString('es-MX', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-    });
-
-    // Formatear el salario a moneda
-    const formattedSalario = salario.toLocaleString('es-MX', {
-        style: 'currency',
-        currency: 'MXN',
-        minimumFractionDigits: 2,
-    });
-
+function EmployeeCard({ employe, onEdit }) {
     // Color para destacar el rol de Administrador
-    const rolClass = rol === 'Administrador' ? 'admin-role' : 'employee-role';
+    const rolClass = employe.rol === 'Administrador' ? 'admin-role' : 'employee-role';
 
     return (
         <div className="employee-card">
             <div className="card-header">
                 {/* Menú de opciones de tarjeta (Editar/Eliminar) */}
                 <div className="card-options">
-                    <button className="option-button">...</button>
+                    {/* Aquí pasamos la función onEdit desde el padre */}
+                    <button className="option-button" onClick={onEdit}>
+                        Editar
+                    </button>
                 </div>
             </div>
 
             <div className="profile-section">
-                {/* Foto de Perfil (usamos una URL placeholder o el Base64 de la imagen) */}
-                {/*Poner una imagen por defecto de usuario */}
+                {/* Foto de Perfil */}
                 <img 
-                    src={imageUrl || 'https://via.placeholder.com/150'} 
-                    alt={nombre} 
+                    src={employe.imageUrl || 'https://via.placeholder.com/150'} 
+                    alt={employe.nombre} 
                     className="profile-photo" 
                 />
                 
-                <h3 className="employee-name">{nombre}</h3>
-                <p className={`employee-role-tag ${rolClass}`}>{rol}</p>
+                <h3 className="employee-name">{employe.nombre}</h3>
+                <p className={`employee-role-tag ${rolClass}`}>{employe.rol}</p>
             </div>
 
             <div className="details-section">
@@ -52,27 +39,27 @@ function EmployeeCard({ idEmpleado, nombre, telefono, rol, salario, fechaIngreso
                 <div className="detail-item">
                     <DollarIcon />
                     <span className="detail-label">Salario:</span>
-                    <span className="detail-value">{formattedSalario}</span>
+                    <span className="detail-value">{employe.salario}</span>
                 </div>
 
                 {/* Teléfono */}
                 <div className="detail-item">
                     <PhoneIcon />
                     <span className="detail-label">Teléfono:</span>
-                    <span className="detail-value">{telefono || 'N/A'}</span>
+                    <span className="detail-value">{employe.telefono || 'N/A'}</span>
                 </div>
 
                 {/* Fecha de Ingreso */}
                 <div className="detail-item">
                     <CalendarIcon />
                     <span className="detail-label">Ingreso:</span>
-                    <span className="detail-value">{formattedDate}</span>
+                    <span className="detail-value">{employe.fechaIngreso}</span>
                 </div>
 
-                {/* ID del Empleado (Para uso interno, similar a "Department" o "Hired Date") */}
+                {/* ID del Empleado */}
                 <div className="detail-item internal-id">
                     <span className="detail-label">ID:</span>
-                    <span className="detail-value">{idEmpleado}</span>
+                    <span className="detail-value">{employe.idEmpleado}</span>
                 </div>
             </div>
         </div>

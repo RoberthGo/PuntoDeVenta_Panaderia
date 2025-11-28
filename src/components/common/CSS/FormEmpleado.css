@@ -1,0 +1,121 @@
+/* Definición de la paleta de colores */
+:root {
+    --color-dark-bg: #0d0d0d;
+    --color-card-bg: #1a1a1a;
+    --color-input-bg: #2d2d2d;
+    --color-text-light: #f0f0f0;
+    --color-brown-base: #5D4037; /* Café oscuro base */
+    --color-brown-accent: #A1887F; /* Café claro de acento */
+    --color-text-placeholder: #6b6b6b;
+}
+
+/* Estilos Globales y Fondo */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--color-dark-bg);
+    color: var(--color-text-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Contenedor Principal del Formulario */
+.contenedor-principal {
+    width: 100%;
+    max-width: 480px;
+    background-color: var(--color-card-bg);
+    padding: 40px;
+    border-radius: 16px; /* Bordes redondeados para la tarjeta */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(93, 64, 55, 0.4); /* Borde sutil café */
+}
+
+/* Encabezado */
+header h1 {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: var(--color-brown-accent);
+    margin-bottom: 5px;
+}
+
+header p {
+    color: #aaaaaa;
+    margin-bottom: 25px;
+}
+
+/* Formulario y Campos */
+#employee-registration-form > div {
+    margin-bottom: 18px;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    color: var(--color-text-light);
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="number"],
+input[type="date"],
+select {
+    width: 100%;
+    padding: 14px 15px;
+    background-color: var(--color-input-bg);
+    color: var(--color-text-light);
+    border: 2px solid transparent;
+    border-radius: 10px; /* Bordes redondeados para campos */
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+/* Placeholders */
+::placeholder {
+    color: var(--color-text-placeholder);
+    opacity: 1; /* Para Firefox */
+}
+
+/* Focus State (Acento Café) */
+input:focus,
+select:focus {
+    outline: none;
+    border-color: var(--color-brown-accent);
+    box-shadow: 0 0 0 3px rgba(161, 136, 127, 0.3); /* Sombra de acento */
+}
+
+/* Botón de Registro */
+button {
+    width: 100%;
+    background-color: var(--color-brown-base);
+    color: var(--color-text-light);
+    padding: 15px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 10px; /* Bordes redondeados para el botón */
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+button:hover {
+    background-color: #4E342E; /* Tono más oscuro al pasar el ratón */
+    transform: translateY(-2px);
+}
+
+
+/* Estilo para el campo select */
+select {
+    /* Asegurar que el color del texto sea correcto incluso para el seleccionado */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+}

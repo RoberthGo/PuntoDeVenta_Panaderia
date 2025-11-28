@@ -6,6 +6,8 @@ import './CSS/Main.css';
 {/*Imports de las paginas*/}
 import SalesPage from './SalesPage';
 import ProductsPage from './ProductsPage';
+import EmployeeCard from './EmployeeCRUDPage'; 
+import EmployeeCRUDPage from "./EmployeeCRUDPage";
 
 function Main() {
     const [selectedPage, setSelectedPage] = useState("Ventas");
@@ -19,6 +21,7 @@ function Main() {
     const renderPage = () => {
         switch (selectedPage) {
             case "Productos": return <ProductsPage />;
+            case "Empleados":  return <EmployeeCRUDPage />;
             default: return <SalesPage />;
         }
     };
