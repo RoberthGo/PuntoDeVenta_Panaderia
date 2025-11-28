@@ -6,6 +6,6 @@ import Main from './pages/Main.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-      <Main />
+      <App />
   </StrictMode>
 )

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import './Login.css';
 
-function Login({ onLogin }) {
+function Login({ onLogin, error }) {
   const [formData, setFormData] = useState({
-    login: '',
-    password: ''
+    nombreUsuario: '',
+    clave: ''
   });
 
   const handleChange = (e) => {
@@ -18,8 +18,8 @@ function Login({ onLogin }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Login: ', formData);
-    // Call onLogin to switch to Main page
-    onLogin();
+    // Call onLogin with form data
+    onLogin(formData);
   };
 
   return (
@@ -32,12 +32,12 @@ function Login({ onLogin }) {
         
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
-            <label htmlFor="login">Usuariox</label>
+            <label htmlFor="nombreUsuario">Usuario</label>
             <input
               type="text"
-              id="login"
-              name="login"
-              value={formData.login}
+              id="nombreUsuario"
+              name="nombreUsuario"
+              value={formData.nombreUsuario}
               onChange={handleChange}
               placeholder="Usuario"
               required
@@ -45,17 +45,19 @@ function Login({ onLogin }) {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Contraseña</label>
+            <label htmlFor="clave">Contraseña</label>
             <input
               type="password"
-              id="password"
-              name="password"
-              value={formData.password}
+              id="clave"
+              name="clave"
+              value={formData.clave}
               onChange={handleChange}
               placeholder="********"
               required
             />
           </div>
+
+          {error && <div className="error-message">{error}</div>}
 
           <button type="submit" className="login-button">
             Ingresar

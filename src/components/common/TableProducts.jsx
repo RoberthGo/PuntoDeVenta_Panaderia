@@ -58,6 +58,11 @@ const SalesOrderPanel = ({ items = [], onRemove }) => {
     const tax = subtotal * 0.16;
     const finalTotal = subtotal + tax;
 
+    const handleSale = () => {
+        // Lógica para finalizar la venta
+        
+    }
+
     return (
         <div className="contenedor-principal-datlle-venta">
             <h2 className="titulo-contenedor">
