@@ -71,7 +71,7 @@ function EmployeeCRUDPage() {
                 alert('Empleado actualizado exitosamente');
             } else {
                 await employeeService.createEmployee(employeeData);
-                alert('Empleado creado exitosamente');
+                alert('✅ Empleado y usuario creados exitosamente.\n\nEl empleado ya puede iniciar sesión con las credenciales proporcionadas.');
             }
             const response = await employeeService.getAllEmployees();
             setEmployees(Array.isArray(response) ? response : []);
@@ -79,7 +79,7 @@ function EmployeeCRUDPage() {
             setShowForm(false);
         } catch (error) {
             console.error('Error guardando empleado', error);
-            alert('Error al guardar el empleado. Intenta nuevamente.');
+            alert(error.message || 'Error al guardar el empleado. Intenta nuevamente.');
         }
     };
 

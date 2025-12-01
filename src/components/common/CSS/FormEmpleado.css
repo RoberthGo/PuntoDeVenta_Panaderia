@@ -158,3 +158,69 @@ textarea.input-error {
 .form-label::after {
     content: '';
 }
+
+/* ==================== SECCIONES DEL FORMULARIO ==================== */
+
+.form-section {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(161, 136, 127, 0.2);
+}
+
+.form-section:last-of-type {
+    border-bottom: none;
+}
+
+.section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-brown-accent);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-subtitle {
+    color: #888;
+    font-size: 0.85rem;
+    margin-bottom: 15px;
+}
+
+/* Sección de credenciales */
+.credentials-section {
+    background-color: rgba(93, 64, 55, 0.1);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(161, 136, 127, 0.3);
+    margin-top: 15px;
+}
+
+.credentials-section .section-title {
+    color: #A1887F;
+}
+
+/* Input de contraseña */
+input[type="password"] {
+    width: 100%;
+    padding: 14px 15px;
+    background-color: var(--color-input-bg);
+    color: var(--color-text-light);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    font-size: 1rem;
+    letter-spacing: 2px;
+}
+
+input[type="password"]:focus {
+    outline: none;
+    border-color: var(--color-brown-accent);
+    box-shadow: 0 0 0 3px rgba(161, 136, 127, 0.3);
+}
+
+input[type="password"].input-error {
+    border-color: #f44336 !important;
+    background-color: rgba(244, 67, 54, 0.1) !important;
+}

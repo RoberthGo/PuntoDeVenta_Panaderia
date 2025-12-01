@@ -36,18 +36,33 @@ export const employeeService = {
   },
 
   /**
-   * Crea un nuevo empleado.
-   * @param {Object} employeeData - Datos del empleado
+   * Crea un nuevo empleado junto con sus credenciales de acceso.
+   * El backend maneja ambos registros en una sola transacción.
+   * @param {Object} employeeData - Datos del empleado y credenciales
    * @param {string} employeeData.nombre - Nombre completo
    * @param {string} employeeData.telefono - Teléfono
    * @param {string} employeeData.rol - 'Empleado' o 'Administrador'
    * @param {number} employeeData.salario - Salario
-   * @returns {Promise<Object>} Empleado creado
+   * @param {Object} employeeData.credenciales - Credenciales de acceso
+   * @param {string} employeeData.credenciales.nombreUsuario - Nombre de usuario
+   * @param {string} employeeData.credenciales.clave - Contraseña
+   * @returns {Promise<Object>} Respuesta del servidor
    */
   createEmployee: async (employeeData) => {
     try {
-      const { nombre, telefono, rol, salario } = employeeData;
-      const response = await api.post('/Empleados', { nombre, telefono, rol, salario });
+      const { nombre, telefono, rol, salario, credenciales } = employeeData;
+
+      // Formato plano que espera EmpleadoRegistro en el backend
+      const payload = {
+        nombre,
+        telefono,
+        rol,
+        salario,
+        nombreUsuario: credenciales.nombreUsuario,
+        clave: credenciales.clave
+      };
+
+      const response = await api.post('/Empleados', payload);
       return response;
     } catch (error) {
       console.error('Error creating employee:', error);
