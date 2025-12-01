@@ -12,7 +12,6 @@ function SalesChartPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    // Load products on mount
     useEffect(() => {
         const fetchProducts = async () => {
             try {
@@ -25,7 +24,6 @@ function SalesChartPage() {
         fetchProducts();
     }, []);
 
-    // Toggle product selection
     const handleProductToggle = (idProducto) => {
         setSelectedProducts(prev => 
             prev.includes(idProducto)
@@ -34,7 +32,6 @@ function SalesChartPage() {
         );
     };
 
-    // Generate chart
     const handleGenerateChart = async () => {
         if (!month1 || !month2) {
             alert('Por favor selecciona dos meses.');
@@ -49,38 +46,26 @@ function SalesChartPage() {
         setError(null);
 
         try {
-            // Calculate date ranges for both months
             const [year1, month1Num] = month1.split('-');
             const [year2, month2Num] = month2.split('-');
-            
-            // First day and last day of month1
-            const inicio1 = `${year1}-${month1Num}-01`;
-            const lastDay1 = new Date(parseInt(year1), parseInt(month1Num), 0).getDate();
-            const fin1 = `${year1}-${month1Num}-${lastDay1}`;
-            
-            // First day and last day of month2
-            const inicio2 = `${year2}-${month2Num}-01`;
-            const lastDay2 = new Date(parseInt(year2), parseInt(month2Num), 0).getDate();
-            const fin2 = `${year2}-${month2Num}-${lastDay2}`;
 
-            // Fetch sales data for both months
             const [dataMes1, dataMes2] = await Promise.all([
-                salesService.getReporteRango(inicio1, fin1, selectedProducts),
-                salesService.getReporteRango(inicio2, fin2, selectedProducts)
+                salesService.getReporteMensual(month1Num, year1, selectedProducts),
+                salesService.getReporteMensual(month2Num, year2, selectedProducts)
             ]);
 
-            // Combine data for each product
             const combinedData = selectedProducts.map(idProducto => {
                 const product = products.find(p => p.idProducto === idProducto);
-                const salesMes1 = dataMes1.find(d => d.idProducto === idProducto);
-                const salesMes2 = dataMes2.find(d => d.idProducto === idProducto);
+                const salesMes1 = dataMes1.find(d => d.clave === idProducto);
+                const salesMes2 = dataMes2.find(d => d.clave === idProducto);
                 
                 return {
-                    idProducto,
+                    idProducto: idProducto,
+                    clave: idProducto,
                     nombre: product?.nombre || salesMes1?.nombre || salesMes2?.nombre || 'Producto',
                     precio: product?.precio || salesMes1?.precio || salesMes2?.precio || 0,
-                    ventasMes1: salesMes1?.totalVentas || 0,
-                    ventasMes2: salesMes2?.totalVentas || 0
+                    ventasMes1: salesMes1?.montoTotal || 0, 
+                    ventasMes2: salesMes2?.montoTotal || 0
                 };
             });
             
