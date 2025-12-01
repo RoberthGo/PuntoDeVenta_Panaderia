@@ -3,7 +3,6 @@ import './CSS/ProductCard.css';
 
 function ProductCard({ idProducto, nombre, precio, descripcion, imageUrl, stock, onAdd }) {
 
-    // Datos básicos para mostrar (sin lógica ni eventos)
     const isAvailable = stock > 0;
 
     const handleCardClick = () => {
@@ -16,52 +15,44 @@ function ProductCard({ idProducto, nombre, precio, descripcion, imageUrl, stock,
         <div 
             className={`product-card ${!isAvailable ? 'unavailable' : ''}`}
             onClick={handleCardClick}
-            style={{ cursor: isAvailable ? 'pointer' : 'not-allowed' }}
         >
-            <div className="product-info-top">
-                {/* Etiqueta simple */}
-                <span className="product-label">
-                    {!isAvailable ? 'AGOTADO' : descripcion ? idProducto : 'NUEVO'}
-                </span>
-
-                {/* Popup estático solo para visualizar */}
-                {descripcion && (
-                    <div className="ingredients-popup">
-                        <p className="popup-text">
-                            <strong>Descripción:</strong> {descripcion}
-                        </p>
-                    </div>
+            {/* Badge de cantidad/estado */}
+            <div className="product-badge">
+                {!isAvailable ? (
+                    <span className="badge-soldout">AGOTADO</span>
+                ) : (
+                    <span className="badge-id">{idProducto}</span>
                 )}
             </div>
 
-            {/* Imagen y nombre */}
-            <div className="product-image-container">
+            {/* Overlay con descripción al hover - cubre toda la tarjeta */}
+            {descripcion && (
+                <div className="product-overlay">
+                    <div className="overlay-content">
+                        <span className="overlay-title">📋 Descripción</span>
+                        <div className="overlay-text-container">
+                            <p className="overlay-text">{descripcion}</p>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Imagen del producto */}
+            <div className="product-image-wrapper">
                 <img src={imageUrl} alt={nombre} className="product-image" />
-
-                <div className="product-name">
-                    {nombre}
-                </div>
-
-                <div className="product-price">
-                    ${precio?.toFixed(2)}
-                </div>
             </div>
 
-            {/* Parte inferior: peso o stock + botón dummy */}
-            <div className="product-actions-bottom">
-                <span className="product-weight">Stock: {stock}</span>
+            {/* Info del producto */}
+            <div className="product-details">
+                <h3 className="product-name">{nombre}</h3>
+                <span className="product-price">${precio?.toFixed(2)}</span>
+            </div>
 
-                <div className="add-button-container">
-                    <button 
-                        className={`add-button ${!isAvailable ? 'disabled' : ''}`} 
-                        disabled={!isAvailable}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            onAdd();
-                        }}
-                    >
-                        Add
-                    </button>
+            {/* Footer con stock */}
+            <div className="product-footer">
+                <div className="stock-info">
+                    <span className={`stock-dot ${stock > 10 ? 'high' : stock > 0 ? 'low' : 'out'}`}></span>
+                    <span className="stock-text">Stock: {stock}</span>
                 </div>
             </div>
         </div>

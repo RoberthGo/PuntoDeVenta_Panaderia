@@ -4,33 +4,33 @@
     grid-template-columns: 60px 1.5fr 1fr 0.7fr 1fr;
     align-items: center;
 
-    background: #1c1a19; /* negro café */
+    background: #0d0d0d;
     padding: 14px 18px;
-    border-radius: 14px;
-    margin-bottom: 12px;
+    border-radius: 12px;
+    margin-bottom: 10px;
     transition: all 0.25s ease;
     position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(139, 69, 19, 0.2);
 }
 
 /* Hover elegante */
 .tabla-products:hover {
-    transform: translateY(-3px);
-    background: #262320; /* café oscuro */
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+    background: rgba(139, 69, 19, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border-color: rgba(139, 69, 19, 0.4);
 }
 
 
 /* --- FOTO --- */
 .foto img {
-    width: 55px;
-    height: 55px;
+    width: 50px;
+    height: 50px;
     object-fit: cover;
-
-    border-radius: 10px;
-    border: 2px solid #3a2f2a; /* borde café */
-    background: #000;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+    border-radius: 8px;
+    border: 2px solid #8B4513;
+    background: #1a1a1a;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
 }
 
 
@@ -39,17 +39,20 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding-left: 0.5rem;
 }
 
 .descripccion p:first-child {
-    color: #e8e1dd; /* blanco cálido */
+    color: #f0f0f0;
     font-weight: 600;
     font-size: 0.95rem;
+    margin: 0;
 }
 
 .descripccion p:last-child {
-    color: #a39b95;
+    color: rgba(255, 255, 255, 0.5);
     font-size: 0.8rem;
+    margin: 0;
 }
 
 
@@ -61,41 +64,47 @@
 .precio span,
 .cantidad span,
 .total span {
-    font-size: 0.75rem;
-    color: #9a928d;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .precio p {
-    color: #d4a373; /* café dorado */
+    color: #FFD700;
+    margin: 4px 0 0 0;
+    font-weight: 500;
 }
 
 .cantidad p {
-    color: #fff;
+    color: #f0f0f0;
     font-weight: 600;
+    margin: 4px 0 0 0;
 }
 
 .total p {
-    color: #77dd77; /* verde limpio */
+    color: #4ade80;
     font-weight: 700;
     font-size: 1rem;
+    margin: 4px 0 0 0;
 }
 
 
 /* --- TOOLTIP PARA DESCRIPCIÓN COMPLETA AL HOVER --- */
 
 .tabla-products::after {
-    content: attr(data-descripcion); /* usa texto desde el HTML */
+    content: attr(data-descripcion);
     position: absolute;
 
     left: 50%;
     top: -10px;
     transform: translate(-50%, -100%);
 
-    background: #2b2725;
-    color: #f5eee9;
-    padding: 8px 12px;
-    border-radius: 10px;
-    font-size: 0.75rem;
+    background: #8B4513;
+    color: #f0f0f0;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.8rem;
     white-space: normal;
     width: 260px;
 
@@ -104,30 +113,30 @@
     transition: opacity 0.25s ease;
     text-align: center;
 
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    z-index: 10;
 }
 
 
 /* --- CONTENEDOR PRINCIPAL --- */
 .contenedor-principal-datlle-venta {
-    background: #1b1918; /* negro café */
-    padding: 22px;
-    border-radius: 16px;
-    width: 95%;
-    color: #e6e0db;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    background: #0d0d0d;
+    padding: 1.5rem;
+    border-radius: 12px;
+    width: 100%;
+    color: #f0f0f0;
+    border: 1px solid rgba(139, 69, 19, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 /* Título */
 .titulo-contenedor {
-    margin-bottom: 18px;
+    margin-bottom: 1.5rem;
     text-align: center;
-    font-size: 1.5rem;
-    color: #f1ebe7;
-    letter-spacing: 0.5px;
+    font-size: 1.3rem;
+    color: #FFD700;
+    letter-spacing: 1px;
     font-weight: 600;
 }
 
@@ -137,18 +146,18 @@
 .encabezado-content {
     display: grid;
     grid-template-columns: 60px 1.5fr 1fr 0.7fr 1fr;
-    background: #24211f;
-    padding: 12px 14px;
-    border-radius: 12px;
-    margin-bottom: 15px;
-
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: #8B4513;
+    padding: 12px 18px;
+    border-radius: 8px;
+    margin-bottom: 12px;
 }
 
 .encabezado-content div {
     font-size: 0.85rem;
     font-weight: 600;
-    color: #c2b9b3;
+    color: #FFD700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 
@@ -157,26 +166,42 @@
 .contenedor-lista {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Scrollbar personalizado */
+.contenedor-lista::-webkit-scrollbar {
+    width: 6px;
+}
+
+.contenedor-lista::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.contenedor-lista::-webkit-scrollbar-thumb {
+    background: #8B4513;
+    border-radius: 3px;
 }
 
 .sin-products {
     text-align: center;
-    padding: 18px 0;
+    padding: 2rem;
     font-size: 0.9rem;
-    color: #948d88;
+    color: rgba(255, 255, 255, 0.5);
 }
 
 
 
 /* --- RESUMEN DE TOTALES --- */
 .detalle-venta-content {
-    background: #1e1b1a;
-    padding: 18px;
-    margin-top: 25px;
-    border-radius: 14px;
-
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    background: rgba(139, 69, 19, 0.1);
+    padding: 1.25rem;
+    margin-top: 1.5rem;
+    border-radius: 10px;
+    border: 1px solid rgba(139, 69, 19, 0.2);
 }
 
 .detalle-venta div {
@@ -191,29 +216,30 @@
 
 /* Subtotal */
 .subtotal {
-    color: #e8e1dd;
+    color: #f0f0f0;
 }
 
 /* IVA */
 .impuestos {
-    color: #d4c9c2;
+    color: rgba(255, 255, 255, 0.7);
 }
 
 /* Total final */
 .precio-final {
-    padding-top: 10px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    margin-top: 10px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(139, 69, 19, 0.3);
+    margin-top: 12px;
 }
 
 .precio-final span:first-child {
     font-weight: 700;
+    color: #FFD700;
 }
 
 .precio-final span:last-child {
     font-weight: 700;
-    color: #77dd77; /* verde bonito */
-    font-size: 1.2rem;
+    color: #4ade80;
+    font-size: 1.3rem;
 }
 
 
@@ -222,32 +248,31 @@
 .botones {
     display: flex;
     justify-content: center;
-    margin-top: 25px;
+    margin-top: 1.5rem;
 }
 
 .btn-venta {
-    padding: 12px 24px;
-    border-radius: 12px;
-
-    background: #6a4f3b; /* café cálido */
-    color: #fff3e6;
+    padding: 14px 40px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #8B4513, #A0522D);
+    color: #FFD700;
     border: none;
-
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
-
-    transition: all 0.25s ease;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 12px rgba(139, 69, 19, 0.4);
 }
 
 .btn-venta:hover {
-    background: #8a6a50;
     transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+    box-shadow: 0 6px 20px rgba(139, 69, 19, 0.5);
 }
 
 .btn-venta:active {
-    transform: scale(0.97);
+    transform: scale(0.98);
 }
 
 /* mostrar tooltip en hover */

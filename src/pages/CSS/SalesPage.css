@@ -1,28 +1,61 @@
 .sales-page-container {
     background-color: #1a1a1a; 
-    padding: 30px;
+    padding: 2rem;
     min-height: 100vh;
     width: 100%;
     box-sizing: border-box;
 }
 
 .sales-page-container h1 {
-    color: white;
+    color: #FFD700;
     text-align: center;
-    margin-bottom: 30px;
-    font-size: 2em;
-    font-weight: 400;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
+/* Grid de productos */
 .bread-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px; 
-    justify-content: center;
-    overflow-x: hidden; 
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem; 
+    margin-bottom: 2rem;
 }
 
-/*Seccion de la tabla de ventas*/
-.seccion-tabla{
-    padding-top: 3rem;
+/* Sección de la tabla de ventas */
+.seccion-tabla {
+    padding-top: 2rem;
+    border-top: 2px solid rgba(139, 69, 19, 0.3);
+}
+
+.seccion-tabla h2 {
+    color: #FFD700;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .bread-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .sales-page-container {
+        padding: 1rem;
+    }
+    
+    .bread-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 1rem;
+    }
+    
+    .sales-page-container h1 {
+        font-size: 1.5rem;
+    }
 }
