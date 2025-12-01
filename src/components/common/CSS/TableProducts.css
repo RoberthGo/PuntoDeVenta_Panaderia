@@ -1,7 +1,7 @@
 /* Contenedor principal de la fila */
 .tabla-products {
     display: grid;
-    grid-template-columns: 60px 1.5fr 1fr 0.7fr 1fr;
+    grid-template-columns: 60px 1.5fr 1fr 0.7fr 1fr auto;
     align-items: center;
 
     background: #0d0d0d;
@@ -90,32 +90,35 @@
 }
 
 
-/* --- TOOLTIP PARA DESCRIPCIÓN COMPLETA AL HOVER --- */
+/* --- BOTÓN REMOVER --- */
+.btn-quitar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-.tabla-products::after {
-    content: attr(data-descripcion);
-    position: absolute;
+.remove-button {
+    background: transparent;
+    color: #ef4444;
+    border: 1px solid #ef4444;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
 
-    left: 50%;
-    top: -10px;
-    transform: translate(-50%, -100%);
+.remove-button:hover {
+    background: #ef4444;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+}
 
-    background: #8B4513;
-    color: #f0f0f0;
-    padding: 10px 14px;
-    border-radius: 8px;
-    font-size: 0.8rem;
-    white-space: normal;
-    width: 260px;
-
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s ease;
-    text-align: center;
-
-    border: 1px solid rgba(255, 215, 0, 0.3);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-    z-index: 10;
+.remove-button:active {
+    transform: scale(0.95);
 }
 
 
@@ -145,7 +148,7 @@
 /* --- ENCABEZADO DE TABLA --- */
 .encabezado-content {
     display: grid;
-    grid-template-columns: 60px 1.5fr 1fr 0.7fr 1fr;
+    grid-template-columns: 60px 1.5fr 1fr 0.7fr 1fr auto;
     background: #8B4513;
     padding: 12px 18px;
     border-radius: 8px;
@@ -273,11 +276,6 @@
 
 .btn-venta:active {
     transform: scale(0.98);
-}
-
-/* mostrar tooltip en hover */
-.tabla-products:hover::after {
-    opacity: 1;
 }
 
 

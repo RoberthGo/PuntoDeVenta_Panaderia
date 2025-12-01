@@ -92,8 +92,11 @@ function Main() {
         });
     };
 
-    /** @param {number} idProducto - ID del producto a remover del carrito */
-    const handleRemoveFromCart = (idProducto) => {
+    /** 
+     * Quita 1 unidad del producto del carrito (click izquierdo)
+     * @param {number} idProducto - ID del producto
+     */
+    const handleRemoveOneFromCart = (idProducto) => {
         setProductos(prev =>
             prev.map(p =>
                 p.idProducto === idProducto ? { ...p, stock: p.stock + 1 } : p
@@ -112,6 +115,21 @@ function Main() {
 
             return prev.filter(i => i.idProducto !== idProducto);
         });
+    };
+
+    /** 
+     * Quita todo el producto del carrito (click derecho)
+     * @param {number} idProducto - ID del producto
+     * @param {number} cantidad - Cantidad a devolver al stock
+     */
+    const handleRemoveAllFromCart = (idProducto, cantidad) => {
+        setProductos(prev =>
+            prev.map(p =>
+                p.idProducto === idProducto ? { ...p, stock: p.stock + cantidad } : p
+            )
+        );
+
+        setCartItems(prev => prev.filter(i => i.idProducto !== idProducto));
     };
 
     /** Valida y procesa la venta actual */
@@ -201,7 +219,8 @@ function Main() {
             <div className="seccion-tabla">
                 <Table 
                     items={cartItems}
-                    onRemove={handleRemoveFromCart}
+                    onRemoveOne={handleRemoveOneFromCart}
+                    onRemoveAll={handleRemoveAllFromCart}
                     onFinalizeSale={handleFinalizeSale}
                 />
             </div>

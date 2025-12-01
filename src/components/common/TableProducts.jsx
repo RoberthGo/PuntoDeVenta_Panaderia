@@ -5,10 +5,17 @@ import "../common/CSS/TableProducts.css";
  * Tarjeta de item en el carrito de venta.
  * @param {Object} props
  * @param {Object} props.item - Producto en el carrito
- * @param {Function} props.onRemove - Callback para remover del carrito
+ * @param {Function} props.onRemoveOne - Callback para quitar 1 unidad (click izquierdo)
+ * @param {Function} props.onRemoveAll - Callback para quitar todo el producto (click derecho)
  */
-const SalesItemCard = ({ item, onRemove }) => {
+const SalesItemCard = ({ item, onRemoveOne, onRemoveAll }) => {
     const total = (item.precio * item.cantidad).toFixed(2);
+
+    /** Click derecho: quitar todo el producto */
+    const handleContextMenu = (e) => {
+        e.preventDefault();
+        onRemoveAll(item.idProducto, item.cantidad);
+    };
 
     return (
         <div className="tabla-products">
@@ -43,7 +50,9 @@ const SalesItemCard = ({ item, onRemove }) => {
             <div className="btn-quitar">
                 <button
                     className="remove-button"
-                    onClick={() => onRemove(item.idProducto)}
+                    onClick={() => onRemoveOne(item.idProducto)}
+                    onContextMenu={handleContextMenu}
+                    title="Click: -1 | Click derecho: quitar todo"
                 >
                     Remover
                 </button>
@@ -57,11 +66,12 @@ const SalesItemCard = ({ item, onRemove }) => {
  * Muestra los productos agregados al carrito con totales.
  * @param {Object} props
  * @param {Array} props.items - Lista de productos en el carrito
- * @param {Function} props.onRemove - Callback para remover producto
+ * @param {Function} props.onRemoveOne - Callback para quitar 1 unidad
+ * @param {Function} props.onRemoveAll - Callback para quitar todo el producto
  * @param {Function} props.onFinalizeSale - Callback para finalizar venta
  * @returns {JSX.Element}
  */
-const SalesOrderPanel = ({ items = [], onRemove, onFinalizeSale }) => {
+const SalesOrderPanel = ({ items = [], onRemoveOne, onRemoveAll, onFinalizeSale }) => {
     const safeItems = items || [];
 
     const subtotal = safeItems.reduce((sum, item) => sum + item.precio * item.cantidad, 0);
@@ -90,7 +100,12 @@ const SalesOrderPanel = ({ items = [], onRemove, onFinalizeSale }) => {
 
             <div className="contenedor-lista">
                 {safeItems.length > 0 && safeItems.map(item => (
-                    <SalesItemCard key={item.idProducto} item={item} onRemove={onRemove} />
+                    <SalesItemCard 
+                        key={item.idProducto} 
+                        item={item} 
+                        onRemoveOne={onRemoveOne}
+                        onRemoveAll={onRemoveAll}
+                    />
                 ))}
 
                 {safeItems.length === 0 && (
