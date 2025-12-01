@@ -45,12 +45,12 @@ export const salesService = {
   getReporteRango: async (inicio, fin, ids = []) => {
     try {
       let endpoint = `/Ventas/ReporteRango?inicio=${inicio}&fin=${fin}`;
-      
+
       // Add product IDs as comma-separated string if provided
       if (ids && ids.length > 0) {
         endpoint += `&ids=${ids.join(',')}`;
       }
-      
+
       const response = await api.get(endpoint);
       return response;
     } catch (error) {
@@ -65,15 +65,30 @@ export const salesService = {
   getReporteMensual: async (month, year, ids = []) => {
     try {
       let endpoint = `/Ventas/ReporteMensual?mes=${month}&anio=${year}&ids=${ids}`;
-      
+
       if (ids && ids.length > 0) {
         endpoint += `&ids=${ids.join(',')}`;
       }
-      
+
       const response = await api.get(endpoint);
       return response;
     } catch (error) {
       console.error('Error fetching monthly sales report:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Obtener detalles de una venta específica
+   * @param {number} idVenta - ID de la venta
+   * @returns {Promise<Array>} Lista de productos de la venta
+   */
+  getSaleDetails: async (idVenta) => {
+    try {
+      const response = await api.get(`/Ventas/Detalle/${idVenta}`);
+      return response;
+    } catch (error) {
+      console.error('Error fetching sale details:', error);
       throw error;
     }
   },

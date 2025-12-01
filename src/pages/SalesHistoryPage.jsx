@@ -6,6 +6,9 @@ function SalesHistoryPage() {
     const [sales, setSales] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [selectedSale, setSelectedSale] = useState(null);
+    const [saleDetails, setSaleDetails] = useState([]);
+    const [loadingDetails, setLoadingDetails] = useState(false);
 
     useEffect(() => {
         let isMounted = true;
@@ -33,6 +36,33 @@ function SalesHistoryPage() {
         fetchSales();
         return () => { isMounted = false; };
     }, []);
+
+    const handleSaleClick = async (sale) => {
+        // Si ya está seleccionada, cerrar el detalle
+        if (selectedSale && selectedSale.idVenta === sale.idVenta) {
+            setSelectedSale(null);
+            setSaleDetails([]);
+            return;
+        }
+
+        setSelectedSale(sale);
+        setLoadingDetails(true);
+
+        try {
+            const details = await salesService.getSaleDetails(sale.idVenta);
+            setSaleDetails(Array.isArray(details) ? details : []);
+        } catch (err) {
+            console.error('Error loading sale details:', err);
+            setSaleDetails([]);
+        } finally {
+            setLoadingDetails(false);
+        }
+    };
+
+    const closeDetails = () => {
+        setSelectedSale(null);
+        setSaleDetails([]);
+    };
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -84,7 +114,11 @@ function SalesHistoryPage() {
                         </thead>
                         <tbody>
                             {sales.map((sale) => (
-                                <tr key={sale.idVenta}>
+                                <tr 
+                                    key={sale.idVenta} 
+                                    onClick={() => handleSaleClick(sale)}
+                                    className={`clickable-row ${selectedSale?.idVenta === sale.idVenta ? 'selected' : ''}`}
+                                >
                                     <td>{sale.idVenta}</td>
                                     <td>{formatDate(sale.fecha)}</td>
                                     <td>{sale.idEmpleado}</td>
@@ -93,6 +127,61 @@ function SalesHistoryPage() {
                             ))}
                         </tbody>
                     </table>
+                </div>
+            )}
+
+            {/* Modal de detalles de la venta */}
+            {selectedSale && (
+                <div className="details-modal-overlay" onClick={closeDetails}>
+                    <div className="details-modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="details-modal-header">
+                            <h2>Detalle de Venta #{selectedSale.idVenta}</h2>
+                            <button className="close-btn" onClick={closeDetails}>×</button>
+                        </div>
+                        
+                        <div className="details-modal-info">
+                            <p><strong>Fecha:</strong> {formatDate(selectedSale.fecha)}</p>
+                            <p><strong>Empleado ID:</strong> {selectedSale.idEmpleado}</p>
+                            <p><strong>Total:</strong> <span className="total-highlight">{formatCurrency(selectedSale.total)}</span></p>
+                        </div>
+
+                        {loadingDetails && (
+                            <div className="loading-details">
+                                <p>Cargando productos...</p>
+                            </div>
+                        )}
+
+                        {!loadingDetails && saleDetails.length === 0 && (
+                            <div className="empty-details">
+                                <p>No se encontraron productos para esta venta.</p>
+                            </div>
+                        )}
+
+                        {!loadingDetails && saleDetails.length > 0 && (
+                            <div className="details-table-container">
+                                <table className="details-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Cantidad</th>
+                                            <th>Precio Unit.</th>
+                                            <th>Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {saleDetails.map((detail) => (
+                                            <tr key={detail.idDetalle}>
+                                                <td>{detail.producto}</td>
+                                                <td className="centered">{detail.cantidad}</td>
+                                                <td>{formatCurrency(detail.precioUnitario)}</td>
+                                                <td className="subtotal-amount">{formatCurrency(detail.subtotal)}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+                    </div>
                 </div>
             )}
         </div>
