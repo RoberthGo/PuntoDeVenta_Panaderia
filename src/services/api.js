@@ -67,6 +67,67 @@ export const api = {
 
   delete: (endpoint, options = {}) => 
     apiRequest(endpoint, { ...options, method: 'DELETE' }),
+
+  postFormData: (endpoint, formData, options = {}) => {
+    const url = `${API_BASE_URL}${endpoint}`;
+    
+    // Log FormData contents for debugging
+    console.log('Sending FormData to:', url);
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
+    
+    const config = {
+      ...options,
+      method: 'POST',
+      body: formData,
+      headers: {
+        ...options.headers,
+        // Don't set Content-Type for FormData, browser will set it with boundary
+      },
+    };
+
+    return fetch(url, config).then(async (response) => {
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('FormData POST Error:', errorData);
+        throw new Error(errorData.message || `HTTP Error: ${response.status}`);
+      }
+      return response.json();
+    });
+  },
+
+  putFormData: (endpoint, formData, options = {}) => {
+    const url = `${API_BASE_URL}${endpoint}`;
+    
+    // Log FormData contents for debugging
+    console.log('Sending PUT FormData to:', url);
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
+    
+    const config = {
+      ...options,
+      method: 'PUT',
+      body: formData,
+      headers: {
+        ...options.headers,
+        // Don't set Content-Type for FormData, browser will set it with boundary
+      },
+    };
+
+    return fetch(url, config).then(async (response) => {
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('FormData PUT Error:', errorData);
+        if (errorData.errors) {
+          console.error('Validation Errors:', errorData.errors);
+        }
+        throw new Error(errorData.message || `HTTP Error: ${response.status}`);
+      }
+      return response.json();
+    });
+  },
 };
 
 export default api;

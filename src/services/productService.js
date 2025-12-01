@@ -36,12 +36,27 @@ export const productService = {
 
   /**
    * Crear nuevo producto
-   * @param {object} productData - Product data
+   * @param {FormData} productData - Product data as FormData
    * @returns {Promise<object>} Created product
    */
   createProduct: async (productData) => {
     try {
-      const response = await api.post('/Productos', productData);
+      const userJson = localStorage.getItem('user');
+      let usuario = '';
+      
+      if (userJson) {
+        try {
+          usuario = userJson || '';
+        } catch (e) {
+          console.error('Error parsing user from localStorage:', e);
+        }
+      }
+      
+      const response = await api.postFormData('/Productos', productData, {
+        headers: {
+          'usuario': usuario,
+        }
+      });
       return response;
     } catch (error) {
       console.error('Error creating product:', error);
@@ -52,12 +67,28 @@ export const productService = {
   /**
    * Update product
    * @param {number} id - Product ID
-   * @param {object} productData - Updated product data
+   * @param {FormData} productData - Updated product data as FormData (already includes idProducto)
    * @returns {Promise<object>} Updated product
    */
   updateProduct: async (id, productData) => {
     try {
-      const response = await api.put(`/Productos/${id}`, productData);
+      const userJson = localStorage.getItem('user');
+      let usuario = '';
+      
+      if (userJson) {
+        try {
+          usuario = userJson || '';
+        } catch (e) {
+          console.error('Error parsing user from localStorage:', e);
+        }
+      }
+      
+      // Don't use ID in route, backend expects it in FormData only
+      const response = await api.putFormData(`/Productos`, productData, {
+        headers: {
+          'usuario': usuario,
+        }
+      });
       return response;
     } catch (error) {
       console.error(`Error updating product ${id}:`, error);
