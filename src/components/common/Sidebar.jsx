@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import './CSS/Sidebar.css';
 
-function Sidebar({ onSelectPage, onLogout }) {
+/**
+ * Sidebar Component
+ * Muestra el menú de navegación según el rol del usuario
+ * @param {function} onSelectPage - Función para cambiar de página
+ * @param {function} onLogout - Función para cerrar sesión
+ * @param {boolean} isAdmin - Indica si el usuario es administrador
+ */
+function Sidebar({ onSelectPage, onLogout, isAdmin }) {
 
     const [activeItem, setActiveItem] = useState("Ventas");
 
@@ -13,8 +20,14 @@ function Sidebar({ onSelectPage, onLogout }) {
     return (
         <nav className="sidebar">
             <h1 className="app-logo">Panaderia Wum Bao</h1>
+            
+            {/* Indicador de rol */}
+            <div className="user-role-badge">
+                {isAdmin ? '👑 Administrador' : '👤 Empleado'}
+            </div>
 
             <ul className="nav-list">
+                {/* Ventas - Disponible para todos */}
                 <li
                     className={`nav-item ${activeItem === "Ventas" ? "active" : ""}`}
                     onClick={() => handleClick("Ventas")}
@@ -23,22 +36,7 @@ function Sidebar({ onSelectPage, onLogout }) {
                     Ventas
                 </li>
 
-                <li
-                    className={`nav-item ${activeItem === "Productos" ? "active" : ""}`}
-                    onClick={() => handleClick("Productos")}
-                >
-                    <span className="nav-icon">📦</span>
-                    Productos
-                </li>
-
-                <li
-                    className={`nav-item ${activeItem === "Comparativo" ? "active" : ""}`}
-                    onClick={() => handleClick("Comparativo")}
-                >
-                    <span className="nav-icon">📊</span>
-                    Gráfico
-                </li>
-
+                {/* Historial - Disponible para todos */}
                 <li
                     className={`nav-item ${activeItem === "Historial" ? "active" : ""}`}
                     onClick={() => handleClick("Historial")}
@@ -47,22 +45,46 @@ function Sidebar({ onSelectPage, onLogout }) {
                     Historial
                 </li>
 
-                <li
-                    className={`nav-item ${activeItem === "Empleados" ? "active" : ""}`}
-                    onClick={() => handleClick("Empleados")}
-                >
-                    <span className="nav-icon">👥</span>
-                    Empleados
-                </li>
+                {/* === SECCIÓN SOLO ADMIN === */}
+                {isAdmin && (
+                    <>
+                        <li className="nav-divider">
+                            <span>Administración</span>
+                        </li>
 
-                <li
-                    className={`nav-item ${activeItem === "Auditorias" ? "active" : ""}`}
-                    onClick={() => handleClick("Auditorias")}
-                >
-                    <span className="nav-icon">🔒</span>
-                    Auditorías
-                </li>
+                        <li
+                            className={`nav-item ${activeItem === "Productos" ? "active" : ""}`}
+                            onClick={() => handleClick("Productos")}
+                        >
+                            <span className="nav-icon">📦</span>
+                            Productos
+                        </li>
 
+                        <li
+                            className={`nav-item ${activeItem === "Comparativo" ? "active" : ""}`}
+                            onClick={() => handleClick("Comparativo")}
+                        >
+                            <span className="nav-icon">📊</span>
+                            Reportes
+                        </li>
+
+                        <li
+                            className={`nav-item ${activeItem === "Empleados" ? "active" : ""}`}
+                            onClick={() => handleClick("Empleados")}
+                        >
+                            <span className="nav-icon">👥</span>
+                            Empleados
+                        </li>
+
+                        <li
+                            className={`nav-item ${activeItem === "Auditorias" ? "active" : ""}`}
+                            onClick={() => handleClick("Auditorias")}
+                        >
+                            <span className="nav-icon">🔒</span>
+                            Auditorías
+                        </li>
+                    </>
+                )}
             </ul>
 
             <div className="sidebar-footer">

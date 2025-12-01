@@ -15,29 +15,29 @@ export const authService = {
    */
   login: async (nombreUsuario, clave) => {
     try {
-      const payload = { 
-        "nombreUsuario": nombreUsuario, 
-        "clave": clave 
+      const payload = {
+        "nombreUsuario": nombreUsuario,
+        "clave": clave
       };
-      
+
       console.log('Sending login request with payload:', payload);
-      
+
       const response = await api.post('/Acceso/Login', payload);
-      
+
       console.log('Login response:', response);
-      
+
       // Store user data and extract idUsuario
       if (response && response.usuario) {
         // Store the entire response
         localStorage.setItem('userData', JSON.stringify(response));
-        
+
         // Store idUsuario separately for easy access
         localStorage.setItem('idUsuario', response.usuario.idUsuario);
         localStorage.setItem('user', nombreUsuario);
-        
+
         console.log('Stored idUsuario:', response.usuario.idUsuario);
       }
-      
+
       return response;
     } catch (error) {
       console.error('Login error:', error);
@@ -82,6 +82,40 @@ export const authService = {
    */
   isAuthenticated: () => {
     return !!localStorage.getItem('userData');
+  },
+
+  /**
+   * Obtener rol del usuario
+   * @returns {string} 'admin' o 'empleado'
+   */
+  getUserRole: () => {
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+      const parsed = JSON.parse(userData);
+      const usuario = parsed?.usuario;
+      const rol = usuario?.rol;
+      // El backend devuelve "Administrador" para admin
+      if (rol && rol.toLowerCase() === 'administrador') {
+        return 'admin';
+      }
+    }
+    return 'empleado';
+  },
+
+  /**
+   * Verificar si el usuario es admin
+   * @returns {boolean}
+   */
+  isAdmin: () => {
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+      const parsed = JSON.parse(userData);
+      const usuario = parsed?.usuario;
+      const rol = usuario?.rol || usuario?.Rol;
+      // El backend devuelve "Administrador" para admin
+      return rol && rol.toLowerCase() === 'administrador';
+    }
+    return false;
   },
 
   /**
