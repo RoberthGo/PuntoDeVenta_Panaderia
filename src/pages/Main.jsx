@@ -4,7 +4,6 @@ import MainContent from '../components/common/MainContent';
 import './CSS/Main.css';
 import { authService } from '../services';
 
-{/*Imports de las paginas*/}
 import SalesPage from './SalesPage';
 import ProductsPage from './ProductsPage';
 import EmployeeCRUDPage from "./EmployeeCRUDPage";
@@ -12,18 +11,23 @@ import SalesHistoryPage from "./SalesHistoryPage";
 import AuditTablePage from "./AuditTablePage";
 import SalesChartPage from "./SalesChartPage";
 
+/**
+ * Layout principal de la aplicación.
+ * Renderiza el Sidebar y la página activa según la selección del usuario.
+ * @param {Object} props
+ * @param {Function} props.onLogout - Callback para cerrar sesión
+ * @returns {JSX.Element}
+ */
 function Main({ onLogout }) {
     const [selectedPage, setSelectedPage] = useState("Ventas");
-    const userRole = authService.getUserRole();
     const isAdmin = authService.isAdmin();
 
-    // Esta función recibe el pageName desde el Sidebar
+    /** @param {string} pageName - Nombre de la página a mostrar */
     const handleSelectPage = (pageName) => {
         setSelectedPage(pageName);
     };
 
-    // Aquí decides qué componente mostrar
-    // Los empleados solo pueden ver Ventas e Historial
+    /** Renderiza la página según la selección y permisos del usuario */
     const renderPage = () => {
         switch (selectedPage) {
             case "Productos": 
@@ -43,15 +47,10 @@ function Main({ onLogout }) {
 
     return (
         <div className="dashboard-layout-container">
-
-            {/* Sidebar manda a llamar handleSelectPage */}
             <Sidebar onSelectPage={handleSelectPage} onLogout={onLogout} isAdmin={isAdmin} />
-
-            {/* Aquí se carga la página que toque */}
             <MainContent>
                 {renderPage()}
             </MainContent>
-
         </div>
     );
 }

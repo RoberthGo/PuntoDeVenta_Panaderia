@@ -1,8 +1,20 @@
 import React from 'react';
 import './CSS/ProductCard.css';
 
+/**
+ * Tarjeta de producto.
+ * Muestra información del producto con imagen, precio y stock.
+ * @param {Object} props
+ * @param {number} props.idProducto - ID del producto
+ * @param {string} props.nombre - Nombre del producto
+ * @param {number} props.precio - Precio unitario
+ * @param {string} props.descripcion - Descripción del producto
+ * @param {string} props.imageUrl - URL de la imagen
+ * @param {number} props.stock - Cantidad en stock
+ * @param {Function} props.onAdd - Callback al agregar al carrito
+ * @returns {JSX.Element}
+ */
 function ProductCard({ idProducto, nombre, precio, descripcion, imageUrl, stock, onAdd }) {
-
     const isAvailable = stock > 0;
 
     const handleCardClick = () => {
@@ -16,7 +28,6 @@ function ProductCard({ idProducto, nombre, precio, descripcion, imageUrl, stock,
             className={`product-card ${!isAvailable ? 'unavailable' : ''}`}
             onClick={handleCardClick}
         >
-            {/* Badge de cantidad/estado */}
             <div className="product-badge">
                 {!isAvailable ? (
                     <span className="badge-soldout">AGOTADO</span>
@@ -25,7 +36,6 @@ function ProductCard({ idProducto, nombre, precio, descripcion, imageUrl, stock,
                 )}
             </div>
 
-            {/* Overlay con descripción al hover - cubre toda la tarjeta */}
             {descripcion && (
                 <div className="product-overlay">
                     <div className="overlay-content">
@@ -37,18 +47,15 @@ function ProductCard({ idProducto, nombre, precio, descripcion, imageUrl, stock,
                 </div>
             )}
 
-            {/* Imagen del producto */}
             <div className="product-image-wrapper">
                 <img src={imageUrl} alt={nombre} className="product-image" />
             </div>
 
-            {/* Info del producto */}
             <div className="product-details">
                 <h3 className="product-name">{nombre}</h3>
                 <span className="product-price">${precio?.toFixed(2)}</span>
             </div>
 
-            {/* Footer con stock */}
             <div className="product-footer">
                 <div className="stock-info">
                     <span className={`stock-dot ${stock > 10 ? 'high' : stock > 0 ? 'low' : 'out'}`}></span>

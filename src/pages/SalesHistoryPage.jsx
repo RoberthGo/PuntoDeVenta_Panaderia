@@ -2,6 +2,11 @@ import { useEffect, useState } from 'react';
 import { salesService } from '../services/salesService';
 import './CSS/SalesHistoryPage.css';
 
+/**
+ * Página de historial de ventas.
+ * Muestra todas las ventas realizadas con opción de ver detalles.
+ * @returns {JSX.Element}
+ */
 function SalesHistoryPage() {
     const [sales, setSales] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -37,8 +42,8 @@ function SalesHistoryPage() {
         return () => { isMounted = false; };
     }, []);
 
+    /** @param {Object} sale - Venta seleccionada para ver detalles */
     const handleSaleClick = async (sale) => {
-        // Si ya está seleccionada, cerrar el detalle
         if (selectedSale && selectedSale.idVenta === sale.idVenta) {
             setSelectedSale(null);
             setSaleDetails([]);
@@ -64,6 +69,7 @@ function SalesHistoryPage() {
         setSaleDetails([]);
     };
 
+    /** @param {string} dateString - Fecha en formato ISO */
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('es-MX', {
@@ -75,6 +81,7 @@ function SalesHistoryPage() {
         });
     };
 
+    /** @param {number} amount - Cantidad a formatear */
     const formatCurrency = (amount) => {
         return `$${parseFloat(amount).toFixed(2)}`;
     };
@@ -130,7 +137,6 @@ function SalesHistoryPage() {
                 </div>
             )}
 
-            {/* Modal de detalles de la venta */}
             {selectedSale && (
                 <div className="details-modal-overlay" onClick={closeDetails}>
                     <div className="details-modal" onClick={(e) => e.stopPropagation()}>

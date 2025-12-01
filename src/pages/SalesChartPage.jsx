@@ -3,17 +3,22 @@ import { productService } from '../services/productService';
 import { salesService } from '../services/salesService';
 import './CSS/SalesChartPage.css';
 
+/**
+ * Página de reportes y gráficas de ventas.
+ * Incluye reporte por rango de fechas y comparativo mensual.
+ * @returns {JSX.Element}
+ */
 function SalesChartPage() {
     const [products, setProducts] = useState([]);
     
-    // Estado para Reporte por Rango
+    /** Estado para Reporte por Rango */
     const [fechaInicio, setFechaInicio] = useState('');
     const [fechaFin, setFechaFin] = useState('');
     const [rangoData, setRangoData] = useState([]);
     const [loadingRango, setLoadingRango] = useState(false);
     const [errorRango, setErrorRango] = useState(null);
 
-    // Estado para Comparativo Mensual
+    /** Estado para Comparativo Mensual */
     const [selectedProducts, setSelectedProducts] = useState([]);
     const [month1, setMonth1] = useState('');
     const [month2, setMonth2] = useState('');
@@ -21,7 +26,7 @@ function SalesChartPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    // Pestaña activa
+    /** Pestaña activa: 'rango' | 'comparativo' */
     const [activeTab, setActiveTab] = useState('rango');
 
     useEffect(() => {
@@ -36,7 +41,7 @@ function SalesChartPage() {
         fetchProducts();
     }, []);
 
-    // === FUNCIONES PARA REPORTE POR RANGO ===
+    /** Genera el reporte de ventas por rango de fechas */
     const handleGenerateRango = async () => {
         if (!fechaInicio || !fechaFin) {
             alert('Por favor selecciona fecha de inicio y fecha fin.');
@@ -57,7 +62,7 @@ function SalesChartPage() {
         }
     };
 
-    // === FUNCIONES PARA COMPARATIVO MENSUAL ===
+    /** @param {number} idProducto - ID del producto a seleccionar/deseleccionar */
     const handleProductToggle = (idProducto) => {
         setSelectedProducts(prev => 
             prev.includes(idProducto)
@@ -66,6 +71,7 @@ function SalesChartPage() {
         );
     };
 
+    /** Genera el reporte comparativo mensual */
     const handleGenerateChart = async () => {
         if (!month1 || !month2) {
             alert('Por favor selecciona dos meses.');
@@ -112,10 +118,12 @@ function SalesChartPage() {
         }
     };
 
+    /** @param {number} amount - Cantidad a formatear como moneda */
     const formatCurrency = (amount) => {
         return `$${parseFloat(amount).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     };
 
+    /** @param {string} monthString - Mes en formato YYYY-MM */
     const formatMonth = (monthString) => {
         if (!monthString) return '';
         const [year, month] = monthString.split('-');
@@ -124,6 +132,7 @@ function SalesChartPage() {
         return `${monthNames[parseInt(month) - 1]} ${year}`;
     };
 
+    /** @param {string} dateString - Fecha en formato YYYY-MM-DD */
     const formatDate = (dateString) => {
         const [year, month, day] = dateString.split('-');
         return `${day}/${month}/${year}`;
@@ -158,7 +167,6 @@ function SalesChartPage() {
                 </button>
             </div>
 
-            {/* ========== SECCIÓN REPORTE POR RANGO ========== */}
             {activeTab === 'rango' && (
                 <div className="section-container">
                     <h2 className="section-title">Reporte de venta por producto</h2>
@@ -228,7 +236,6 @@ function SalesChartPage() {
                                 </table>
                             </div>
 
-                            {/* Gráfica de Rango */}
                             <div className="chart-container">
                                 <h2 className="chart-title">Ventas por Producto ({formatDate(fechaInicio)} - {formatDate(fechaFin)})</h2>
                                 <div className="bar-chart">
@@ -342,7 +349,6 @@ function SalesChartPage() {
 
                     {salesData.length > 0 && (
                         <div className="results-section">
-                            {/* Table */}
                             <div className="sales-table-container">
                                 <table className="sales-comparison-table">
                                     <thead>
@@ -368,7 +374,6 @@ function SalesChartPage() {
                                 </table>
                             </div>
 
-                            {/* Chart */}
                             <div className="chart-container">
                                 <h2 className="chart-title">Comparativo de ventas en dos diferentes meses</h2>
                                 <div className="bar-chart">

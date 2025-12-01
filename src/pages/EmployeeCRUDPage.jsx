@@ -7,13 +7,17 @@ import FormEmpleado from '../components/common/FormEmpleado';
 import './CSS/EmployeeCRUDPage.css';
 import '../components/common/CSS/EmployeeCard.css';
 
+/**
+ * Página de gestión CRUD de empleados.
+ * Permite ver, crear, editar y eliminar empleados.
+ * @returns {JSX.Element}
+ */
 function EmployeeCRUDPage() {
-    const [employees, setEmployees] = useState([]); // Lista real de la API
-    const [showForm, setShowForm] = useState(false); // Controla visibilidad del form
-    const formRef = useRef(null); // Referencia para scroll
-    const [selectedEmployee, setSelectedEmployee] = useState(null); // Empleado a editar
+    const [employees, setEmployees] = useState([]);
+    const [showForm, setShowForm] = useState(false);
+    const formRef = useRef(null);
+    const [selectedEmployee, setSelectedEmployee] = useState(null);
 
-    // Cargar empleados desde API al iniciar
     useEffect(() => {
         const fetchEmployees = async () => {
             try {
@@ -29,21 +33,21 @@ function EmployeeCRUDPage() {
 
     const totalEmployees = employees.length;
 
-    // Mostrar formulario para agregar nuevo empleado
+    /** Muestra el formulario para agregar un nuevo empleado */
     const handleShowForm = () => {
-        setSelectedEmployee(null); // limpiar formulario
+        setSelectedEmployee(null);
         setShowForm(true);
         setTimeout(() => formRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
     };
 
-    // Mostrar formulario para editar empleado
+    /** @param {Object} employee - Datos del empleado a editar */
     const handleEditEmployee = (employee) => {
-        setSelectedEmployee(employee); // cargar datos en el form
+        setSelectedEmployee(employee);
         setShowForm(true);
         setTimeout(() => formRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
     };
 
-    // Eliminar empleado
+    /** @param {number} idEmpleado - ID del empleado a eliminar */
     const handleDeleteEmployee = async (idEmpleado) => {
         const confirmDelete = window.confirm('¿Estás seguro de que deseas eliminar este empleado?');
         if (!confirmDelete) return;
@@ -51,8 +55,6 @@ function EmployeeCRUDPage() {
         try {
             await employeeService.deleteEmployee(idEmpleado);
             alert('Empleado eliminado exitosamente');
-            
-            // Refrescar lista de empleados
             const response = await employeeService.getAllEmployees();
             setEmployees(Array.isArray(response) ? response : []);
         } catch (error) {
@@ -61,23 +63,20 @@ function EmployeeCRUDPage() {
         }
     };
 
-    // Guardar o actualizar empleado (callback del form)
+    /** @param {Object} employeeData - Datos del empleado a guardar */
     const handleSubmitForm = async (employeeData) => {
         try {
             if (selectedEmployee) {
-                // Actualizar
                 await employeeService.updateEmployee(employeeData);
                 alert('Empleado actualizado exitosamente');
             } else {
-                // Crear
                 await employeeService.createEmployee(employeeData);
                 alert('Empleado creado exitosamente');
             }
-            // Refrescar lista de empleados
             const response = await employeeService.getAllEmployees();
             setEmployees(Array.isArray(response) ? response : []);
-            setSelectedEmployee(null); // limpiar form
-            setShowForm(false); // Ocultar formulario
+            setSelectedEmployee(null);
+            setShowForm(false);
         } catch (error) {
             console.error('Error guardando empleado', error);
             alert('Error al guardar el empleado. Intenta nuevamente.');
@@ -86,7 +85,6 @@ function EmployeeCRUDPage() {
 
     return (
         <div className="employees-crud-view">
-            {/* Cabecera y botones de acción */}
             <div className="header-actions">
                 <h2 className="employee-count">{totalEmployees} Empleados</h2>
                 <div className="action-buttons">
@@ -96,7 +94,6 @@ function EmployeeCRUDPage() {
                 </div>
             </div>
 
-            {/* Cuadrícula de empleados */}
             <div className="employee-grid">
                 {employees.map(emp => (
                     <EmployeeCard

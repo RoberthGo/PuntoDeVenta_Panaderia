@@ -1,14 +1,15 @@
 import { api } from './api';
 
 /**
- * Sales Service
- * Handles sales-related API operations
+ * Servicio de Ventas.
+ * Gestiona operaciones de ventas y reportes con la API.
+ * @module salesService
  */
 export const salesService = {
   /**
-   * Create new sale
-   * @param {object} saleData - Sale data including products and customer info
-   * @returns {Promise<object>} Created sale
+   * Registra una nueva venta.
+   * @param {Object} saleData - Datos de la venta (idEmpleado, productos)
+   * @returns {Promise<Object>} Venta creada
    */
   createSale: async (saleData) => {
     try {
@@ -36,11 +37,11 @@ export const salesService = {
   },
 
   /**
-   * Get sales report by date range and product IDs
-   * @param {string} inicio - Start date (YYYY-MM-DD)
-   * @param {string} fin - End date (YYYY-MM-DD)
-   * @param {Array<number>} ids - Array of product IDs (optional)
-   * @returns {Promise<Array>} Sales report data
+   * Obtiene reporte de ventas por rango de fechas.
+   * @param {string} inicio - Fecha inicio (YYYY-MM-DD)
+   * @param {string} fin - Fecha fin (YYYY-MM-DD)
+   * @param {Array<number>} ids - IDs de productos (opcional)
+   * @returns {Promise<Array>} Datos del reporte
    */
   getReporteRango: async (inicio, fin, ids = []) => {
     try {
@@ -60,7 +61,11 @@ export const salesService = {
   },
 
   /**
-   * Obtener reporte de ventas de un mes
+   * Obtiene reporte de ventas mensual.
+   * @param {number} month - Número del mes (1-12)
+   * @param {number} year - Año
+   * @param {Array<number>} ids - IDs de productos (opcional)
+   * @returns {Promise<Array>} Datos del reporte mensual
    */
   getReporteMensual: async (month, year, ids = []) => {
     try {

@@ -1,13 +1,14 @@
 import { api } from './api';
 
 /**
- * Product Service
- * Handles product-related API operations
+ * Servicio de Productos.
+ * Gestiona operaciones CRUD de productos con la API.
+ * @module productService
  */
 export const productService = {
   /**
-   * Tomar todos los productos
-   * @returns {Promise<Array>} List of products
+   * Obtiene todos los productos.
+   * @returns {Promise<Array>} Lista de productos
    */
   getAllProducts: async () => {
     try {
@@ -20,9 +21,9 @@ export const productService = {
   },
 
   /**
-   * Get product by ID
-   * @param {number} id - Product ID
-   * @returns {Promise<object>} Product data
+   * Obtiene un producto por su ID.
+   * @param {number} id - ID del producto
+   * @returns {Promise<Object>} Datos del producto
    */
   getProductById: async (id) => {
     try {
@@ -35,15 +36,15 @@ export const productService = {
   },
 
   /**
-   * Crear nuevo producto
-   * @param {FormData} productData - Product data as FormData
-   * @returns {Promise<object>} Created product
+   * Crea un nuevo producto.
+   * @param {FormData} productData - Datos del producto como FormData
+   * @returns {Promise<Object>} Producto creado
    */
   createProduct: async (productData) => {
     try {
       const userJson = localStorage.getItem('user');
       let usuario = '';
-      
+
       if (userJson) {
         try {
           usuario = userJson || '';
@@ -51,7 +52,7 @@ export const productService = {
           console.error('Error parsing user from localStorage:', e);
         }
       }
-      
+
       const response = await api.postFormData('/Productos', productData, {
         headers: {
           'usuario': usuario,
@@ -65,16 +66,16 @@ export const productService = {
   },
 
   /**
-   * Update product
-   * @param {number} id - Product ID
-   * @param {FormData} productData - Updated product data as FormData (already includes idProducto)
-   * @returns {Promise<object>} Updated product
+   * Actualiza un producto existente.
+   * @param {number} id - ID del producto
+   * @param {FormData} productData - Datos actualizados (incluye idProducto)
+   * @returns {Promise<Object>} Producto actualizado
    */
   updateProduct: async (id, productData) => {
     try {
       const userJson = localStorage.getItem('user');
       let usuario = '';
-      
+
       if (userJson) {
         try {
           usuario = userJson || '';
@@ -82,8 +83,7 @@ export const productService = {
           console.error('Error parsing user from localStorage:', e);
         }
       }
-      
-      // Don't use ID in route, backend expects it in FormData only
+
       const response = await api.putFormData(`/Productos`, productData, {
         headers: {
           'usuario': usuario,
@@ -97,25 +97,23 @@ export const productService = {
   },
 
   /**
-   * Delete product
-   * @param {number} id - Product ID
-   * @returns {Promise<object>}
+   * Elimina un producto.
+   * @param {number} id - ID del producto
+   * @returns {Promise<Object>} Respuesta del servidor
    */
   deleteProduct: async (id) => {
     try {
-      // Get user from localStorage for audit purposes
       const userJson = localStorage.getItem('user');
       let usuario = '';
-      
+
       if (userJson) {
         try {
-          // const user = JSON.parse(userJson);
           usuario = userJson || '';
         } catch (e) {
           console.error('Error parsing user from localStorage:', e);
         }
       }
-      
+
       const response = await api.delete(`/Productos/${id}`, {
         headers: {
           'usuario': usuario,

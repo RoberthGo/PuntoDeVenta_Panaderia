@@ -2,14 +2,11 @@ import React, { useState } from 'react';
 import './CSS/Sidebar.css';
 
 /**
- * Sidebar Component
- * Muestra el menú de navegación según el rol del usuario
- * @param {function} onSelectPage - Función para cambiar de página
- * @param {function} onLogout - Función para cerrar sesión
- * @param {boolean} isAdmin - Indica si el usuario es administrador
+ * @param {function} onSelectPage
+ * @param {function} onLogout
+ * @param {boolean} isAdmin
  */
 function Sidebar({ onSelectPage, onLogout, isAdmin }) {
-
     const [activeItem, setActiveItem] = useState("Ventas");
 
     const handleClick = (pageName) => {
@@ -21,13 +18,11 @@ function Sidebar({ onSelectPage, onLogout, isAdmin }) {
         <nav className="sidebar">
             <h1 className="app-logo">Panaderia Wum Bao</h1>
             
-            {/* Indicador de rol */}
             <div className="user-role-badge">
                 {isAdmin ? '👑 Administrador' : '👤 Empleado'}
             </div>
 
             <ul className="nav-list">
-                {/* Ventas - Disponible para todos */}
                 <li
                     className={`nav-item ${activeItem === "Ventas" ? "active" : ""}`}
                     onClick={() => handleClick("Ventas")}
@@ -36,7 +31,6 @@ function Sidebar({ onSelectPage, onLogout, isAdmin }) {
                     Ventas
                 </li>
 
-                {/* Historial - Disponible para todos */}
                 <li
                     className={`nav-item ${activeItem === "Historial" ? "active" : ""}`}
                     onClick={() => handleClick("Historial")}
@@ -45,7 +39,6 @@ function Sidebar({ onSelectPage, onLogout, isAdmin }) {
                     Historial
                 </li>
 
-                {/* === SECCIÓN SOLO ADMIN === */}
                 {isAdmin && (
                     <>
                         <li className="nav-divider">

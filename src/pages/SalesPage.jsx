@@ -8,6 +8,11 @@ import { authService } from "../services/authService";
 
 import img1 from "../Images/img-1.jpg";
 
+/**
+ * Página principal de ventas.
+ * Muestra productos disponibles y permite agregarlos al carrito.
+ * @returns {JSX.Element}
+ */
 function Main() {
     const [productos, setProductos] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -22,26 +27,21 @@ function Main() {
                 setError(null);
                 const data = await productService.getAllProducts();
                 const withImages = (Array.isArray(data) ? data : []).map(p => {
-                    let imageUrl = img1; // Default image
+                    let imageUrl = img1;
                     
-                    // Handle different image formats from backend
                     if (p.imagen) {
-                        // If imagen is a byte array or base64 string
                         if (typeof p.imagen === 'string' && p.imagen.startsWith('data:image')) {
                             imageUrl = p.imagen;
                         } else if (typeof p.imagen === 'string') {
-                            // Assume it's base64 without prefix
                             imageUrl = `data:image/jpeg;base64,${p.imagen}`;
                         }
                     } else if (p.imagenBase64) {
-                        // If backend sends imagenBase64 field
                         if (p.imagenBase64.startsWith('data:image')) {
                             imageUrl = p.imagenBase64;
                         } else {
                             imageUrl = `data:image/jpeg;base64,${p.imagenBase64}`;
                         }
                     } else if (p.imageUrl) {
-                        // If backend sends imageUrl field
                         imageUrl = p.imageUrl;
                     }
                     
@@ -62,14 +62,13 @@ function Main() {
         return () => { isMounted = false; };
     }, []);
 
+    /** @param {number} idProducto - ID del producto a agregar al carrito */
     const handleAddToCart = (idProducto) => {
-        // Verificar stock disponible primero
         const product = productos.find(p => p.idProducto === idProducto);
         if (!product || product.stock <= 0) {
             return;
         }
 
-        // Reducir stock localmente
         setProductos(prev =>
             prev.map(p =>
                 p.idProducto === idProducto && p.stock > 0
@@ -78,7 +77,6 @@ function Main() {
             )
         );
 
-        // Agregar a carrito o aumentar cantidad
         setCartItems(prevCart => {
             const exists = prevCart.find(item => item.idProducto === idProducto);
 
@@ -94,45 +92,41 @@ function Main() {
         });
     };
 
+    /** @param {number} idProducto - ID del producto a remover del carrito */
     const handleRemoveFromCart = (idProducto) => {
-        // 1) Actualiza productos (regresa 1 al stock)
         setProductos(prev =>
-        prev.map(p =>
-            p.idProducto === idProducto ? { ...p, stock: p.stock + 1 } : p
-        )
+            prev.map(p =>
+                p.idProducto === idProducto ? { ...p, stock: p.stock + 1 } : p
+            )
         );
 
-        // 2) Actualiza carrito usando el estado previo (evita usar cartItems directamente)
         setCartItems(prev => {
-        const itemInPrev = prev.find(i => i.idProducto === idProducto);
-        if (!itemInPrev) return prev; // nada que hacer
+            const itemInPrev = prev.find(i => i.idProducto === idProducto);
+            if (!itemInPrev) return prev;
 
-        if (itemInPrev.cantidad > 1) {
-            // decrementar cantidad
-            return prev.map(i =>
-            i.idProducto === idProducto ? { ...i, cantidad: i.cantidad - 1 } : i
-            );
-        }
+            if (itemInPrev.cantidad > 1) {
+                return prev.map(i =>
+                    i.idProducto === idProducto ? { ...i, cantidad: i.cantidad - 1 } : i
+                );
+            }
 
-        // si cantidad === 1 -> remover el item
-        return prev.filter(i => i.idProducto !== idProducto);
+            return prev.filter(i => i.idProducto !== idProducto);
         });
     };
 
+    /** Valida y procesa la venta actual */
     const handleFinalizeSale = async () => {
         if (cartItems.length === 0) {
             alert('El carrito está vacío. Agrega productos antes de finalizar la venta.');
             return;
         }
 
-        // Validar que hay un empleado autenticado
         const idEmpleado = authService.getUserId();
         if (!idEmpleado) {
             alert('Error: No se pudo identificar al empleado. Por favor, inicia sesión nuevamente.');
             return;
         }
 
-        // Validar que todos los productos tengan datos válidos
         for (const item of cartItems) {
             if (!item.idProducto || item.idProducto <= 0) {
                 alert('Error: Producto inválido en el carrito.');
@@ -149,7 +143,6 @@ function Main() {
         }
 
         try {
-            // Transformar cartItems al formato requerido por la API
             const saleData = {
                 idEmpleado: idEmpleado,
                 productos: cartItems.map(item => ({
@@ -163,10 +156,8 @@ function Main() {
             console.log('Venta registrada exitosamente:', response);
             alert('¡Venta finalizada con éxito!');
             
-            // Limpiar el carrito después de la venta exitosa
             setCartItems([]);
             
-            // Opcional: Recargar productos para actualizar stock desde el servidor
             const data = await productService.getAllProducts();
             const withImages = (Array.isArray(data) ? data : []).map(p => ({
                 ...p,

@@ -5,6 +5,11 @@ import { productService } from "../services/productService";
 import { categoryService } from "../services/categoryService";
 import img1 from "../Images/img-1.jpg";
 
+/**
+ * Página de gestión de productos (CRUD).
+ * Permite ver, crear, editar y eliminar productos.
+ * @returns {JSX.Element}
+ */
 function ProductsPage() {
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -28,7 +33,7 @@ function ProductsPage() {
     const [saving, setSaving] = useState(false);
     const [validationErrors, setValidationErrors] = useState({});
 
-    // Constantes de validación basadas en la BD
+    /** Constantes de validación basadas en restricciones de la BD */
     const VALIDATION = {
         nombre: { maxLength: 100, required: true },
         descripcion: { maxLength: 200, required: false },
@@ -39,23 +44,20 @@ function ProductsPage() {
         categoria: { required: true }
     };
 
-    // Función de validación
+    /** Valida todos los campos del formulario @returns {boolean} */
     const validateForm = () => {
         const errors = {};
         
-        // Validar nombre
         if (!formData.nombre.trim()) {
             errors.nombre = 'El nombre es obligatorio';
         } else if (formData.nombre.length > VALIDATION.nombre.maxLength) {
             errors.nombre = `Máximo ${VALIDATION.nombre.maxLength} caracteres`;
         }
         
-        // Validar descripción
         if (formData.descripcion && formData.descripcion.length > VALIDATION.descripcion.maxLength) {
             errors.descripcion = `Máximo ${VALIDATION.descripcion.maxLength} caracteres`;
         }
         
-        // Validar precio
         const precio = parseFloat(formData.precio);
         if (!formData.precio && formData.precio !== 0) {
             errors.precio = 'El precio es obligatorio';
@@ -65,7 +67,6 @@ function ProductsPage() {
             errors.precio = 'El precio excede el límite permitido';
         }
         
-        // Validar costo
         const costo = parseFloat(formData.costo);
         if (!formData.costo && formData.costo !== 0) {
             errors.costo = 'El costo es obligatorio';
@@ -75,7 +76,6 @@ function ProductsPage() {
             errors.costo = 'El costo excede el límite permitido';
         }
         
-        // Validar stock
         const stock = parseInt(formData.stock);
         if (formData.stock === '' || formData.stock === null) {
             errors.stock = 'El stock es obligatorio';
@@ -85,7 +85,6 @@ function ProductsPage() {
             errors.stock = 'El stock excede el límite permitido';
         }
         
-        // Validar nivel de reorden
         const reorderLevel = parseInt(formData.reorderLevel);
         if (formData.reorderLevel === '' || formData.reorderLevel === null) {
             errors.reorderLevel = 'El nivel de reorden es obligatorio';
@@ -93,7 +92,6 @@ function ProductsPage() {
             errors.reorderLevel = 'El nivel de reorden debe ser un número entero positivo';
         }
         
-        // Validar categoría
         if (!formData.categoria) {
             errors.categoria = 'Selecciona una categoría';
         }
@@ -102,32 +100,28 @@ function ProductsPage() {
         return Object.keys(errors).length === 0;
     };
 
+    /** Carga todos los productos desde la API */
     const fetchProducts = async () => {
         try {
             setLoading(true);
             setError(null);
             const data = await productService.getAllProducts();
             const withImages = (Array.isArray(data) ? data : []).map(p => {
-                let imageUrl = img1; // Default image
+                let imageUrl = img1;
                 
-                // Handle different image formats from backend
                 if (p.imagen) {
-                    // If imagen is a byte array or base64 string
                     if (typeof p.imagen === 'string' && p.imagen.startsWith('data:image')) {
                         imageUrl = p.imagen;
                     } else if (typeof p.imagen === 'string') {
-                        // Assume it's base64 without prefix
                         imageUrl = `data:image/jpeg;base64,${p.imagen}`;
                     }
                 } else if (p.imagenBase64) {
-                    // If backend sends imagenBase64 field
                     if (p.imagenBase64.startsWith('data:image')) {
                         imageUrl = p.imagenBase64;
                     } else {
                         imageUrl = `data:image/jpeg;base64,${p.imagenBase64}`;
                     }
                 } else if (p.imageUrl) {
-                    // If backend sends imageUrl field
                     imageUrl = p.imageUrl;
                 }
                 
@@ -145,6 +139,7 @@ function ProductsPage() {
         }
     };
 
+    /** Carga todas las categorías desde la API */
     const fetchCategories = async () => {
         try {
             const data = await categoryService.getAllCategories();
@@ -159,7 +154,7 @@ function ProductsPage() {
         fetchCategories();
     }, []);
 
-    // Reset form
+    /** Limpia el formulario y estado de edición */
     const resetForm = () => {
         setFormData({
             nombre: '',
@@ -175,13 +170,13 @@ function ProductsPage() {
         setEditingProduct(null);
     };
 
-    // Open modal for creating
+    /** Abre el modal para crear un nuevo producto */
     const handleCreate = () => {
         resetForm();
         setShowModal(true);
     };
 
-    // Open modal for editing
+    /** @param {Object} product - Producto a editar */
     const handleEdit = (product) => {
         setEditingProduct(product);
         setFormData({
@@ -195,7 +190,6 @@ function ProductsPage() {
             imageFile: null
         });
         
-        // Set image preview from existing product image
         let preview = '';
         if (product.imagen) {
             if (typeof product.imagen === 'string' && product.imagen.startsWith('data:image')) {
@@ -217,7 +211,7 @@ function ProductsPage() {
         setShowModal(true);
     };
 
-    // Delete product
+    /** @param {number} idProducto - ID del producto a eliminar */
     const handleDelete = async (idProducto) => {
         if (!window.confirm('¿Estás seguro de eliminar este producto?')) return;
         
@@ -230,7 +224,7 @@ function ProductsPage() {
         }
     };
 
-    // Handle form input changes
+    /** @param {Event} e - Evento del input */
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
@@ -239,11 +233,10 @@ function ProductsPage() {
         }));
     };
 
-    // Submit form (create or update)
+    /** @param {Event} e - Evento del formulario */
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        // Validar antes de enviar
         if (!validateForm()) {
             return;
         }
@@ -255,31 +248,27 @@ function ProductsPage() {
         formDataToSend.append('precio', formData.precio);
         formDataToSend.append('descripcion', formData.descripcion);
         formDataToSend.append('stock', formData.stock);
-        formDataToSend.append('idCategoria', formData.categoria); // Backend expects idCategoria
+        formDataToSend.append('idCategoria', formData.categoria);
         formDataToSend.append('costo', formData.costo);
         formDataToSend.append('reorderLevel', formData.reorderLevel);
         
-        // Send imagenArchivo - backend requires this parameter
         if (formData.imageFile) {
             formDataToSend.append('imagenArchivo', formData.imageFile);
         } else {
-            // Send empty file with proper filename to satisfy backend validation
             const emptyFile = new File([], 'empty.txt', { type: 'text/plain' });
             formDataToSend.append('imagenArchivo', emptyFile);
         }
 
         try {
             if (editingProduct) {
-                // Update - add idProducto to FormData
                 formDataToSend.append('idProducto', editingProduct.idProducto);
                 await productService.updateProduct(editingProduct.idProducto, formDataToSend);
             } else {
-                // Create
                 await productService.createProduct(formDataToSend);
             }
             setShowModal(false);
             resetForm();
-            fetchProducts(); // Reload products
+            fetchProducts();
         } catch (err) {
             console.error('Error saving product:', err);
             alert('Error al guardar el producto');
@@ -288,7 +277,7 @@ function ProductsPage() {
         }
     };
 
-    // Close modal
+    /** Cierra el modal y limpia el formulario */
     const handleCloseModal = () => {
         setShowModal(false);
         resetForm();
@@ -344,7 +333,6 @@ function ProductsPage() {
                 </div>
             )}
 
-            {/* Modal for Create/Edit */}
             {showModal && (
                 <div className="modal-overlay" onClick={handleCloseModal}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>

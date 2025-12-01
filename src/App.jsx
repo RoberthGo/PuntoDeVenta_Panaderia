@@ -4,14 +4,17 @@ import Login from './components/Auth/Login'
 import Main from './pages/Main'
 import { authService } from './services'
 
+/**
+ * Componente principal de la aplicación.
+ * Gestiona la autenticación y renderiza Login o Main según el estado.
+ * @returns {JSX.Element}
+ */
 function App() {
-  // Inicializar estados con datos de localStorage si existen
   const [isAuthenticated, setIsAuthenticated] = useState(() => authService.isAuthenticated())
   const [userData, setUserData] = useState(() => authService.getCurrentUser())
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  // Verificar sesión al cargar la aplicación
   useEffect(() => {
     const checkSession = () => {
       const isAuth = authService.isAuthenticated()
@@ -30,11 +33,10 @@ function App() {
     checkSession()
   }, [])
 
+  /** @param {Object} loginData - Credenciales del usuario */
   const handleLogin = async (loginData) => {
     try {
       setError(null)
-      console.log('Login data received:', loginData); // Debug log
-      
       const response = await authService.login(loginData.nombreUsuario, loginData.clave)
       
       if (response) {
@@ -44,12 +46,12 @@ function App() {
         throw new Error('No se recibieron datos del usuario')
       }
     } catch (error) {
-      console.error('Login failed:', error)
       setError(error.message || 'Usuario o contraseña incorrectos')
       setIsAuthenticated(false)
     }
   }
 
+  /** Cierra la sesión del usuario actual */
   const handleLogout = async () => {
     try {
       await authService.logout()
@@ -60,7 +62,6 @@ function App() {
     }
   }
 
-  // Mostrar loading mientras se verifica la sesión
   if (loading) {
     return (
       <div className="app loading-screen">

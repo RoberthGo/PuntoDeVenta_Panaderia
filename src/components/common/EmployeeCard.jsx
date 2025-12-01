@@ -1,17 +1,24 @@
 import React from 'react';
 import './CSS/EmployeeCard.css'; 
 
-// Iconos
 const PhoneIcon = () => <span className="icon">📞</span>;
 const CalendarIcon = () => <span className="icon">📅</span>;
 const DollarIcon = () => <span className="icon">💵</span>;
 const UserIcon = () => <span className="icon user-icon">👤</span>;
 
+/**
+ * Tarjeta de empleado.
+ * Muestra información del empleado con opciones de editar y eliminar.
+ * @param {Object} props
+ * @param {Object} props.employe - Datos del empleado
+ * @param {Function} props.onEdit - Callback para editar
+ * @param {Function} props.onDelete - Callback para eliminar
+ * @returns {JSX.Element}
+ */
 function EmployeeCard({ employe, onEdit, onDelete }) {
-    // Color para destacar el rol de Administrador
     const rolClass = employe.rol === 'Administrador' ? 'admin-role' : '';
     
-    // Formatear fecha
+    /** @param {string} dateString */
     const formatDate = (dateString) => {
         if (!dateString) return 'N/A';
         const date = new Date(dateString);
@@ -22,14 +29,13 @@ function EmployeeCard({ employe, onEdit, onDelete }) {
         });
     };
 
-    // Formatear salario
+    /** @param {number} salary */
     const formatSalary = (salary) => {
         return `$${parseFloat(salary).toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
     };
 
     return (
         <div className="employee-card">
-            {/* Sección superior con avatar e info principal */}
             <div className="card-top">
                 <div className="avatar-container">
                     <UserIcon />
@@ -40,7 +46,6 @@ function EmployeeCard({ employe, onEdit, onDelete }) {
                 </div>
             </div>
 
-            {/* Detalles del empleado */}
             <div className="details-section">
                 <div className="detail-item">
                     <DollarIcon />
@@ -61,7 +66,6 @@ function EmployeeCard({ employe, onEdit, onDelete }) {
                 </div>
             </div>
 
-            {/* Footer con ID y acciones */}
             <div className="card-footer">
                 <span className="employee-id">ID: {employe.idEmpleado}</span>
                 <div className="card-actions">

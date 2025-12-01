@@ -2,40 +2,23 @@ import { api } from './api';
 
 /**
  * Authentication Service
- * Para operaciones de autenticacion basicas
- * no JWT
- * login y register
+ * Operaciones de autenticación: login, logout, register
  */
 export const authService = {
   /**
-   * Login user
-   * @param {string} nombreUsuario - Username
-   * @param {string} clave - password
-   * @returns {Promise<object>} User data
+   * @param {string} nombreUsuario
+   * @param {string} clave
+   * @returns {Promise<object>}
    */
   login: async (nombreUsuario, clave) => {
     try {
-      const payload = {
-        "nombreUsuario": nombreUsuario,
-        "clave": clave
-      };
-
-      console.log('Sending login request with payload:', payload);
-
+      const payload = { nombreUsuario, clave };
       const response = await api.post('/Acceso/Login', payload);
 
-      console.log('Login response:', response);
-
-      // Store user data and extract idUsuario
       if (response && response.usuario) {
-        // Store the entire response
         localStorage.setItem('userData', JSON.stringify(response));
-
-        // Store idUsuario separately for easy access
         localStorage.setItem('idUsuario', response.usuario.idUsuario);
         localStorage.setItem('user', nombreUsuario);
-
-        console.log('Stored idUsuario:', response.usuario.idUsuario);
       }
 
       return response;
@@ -45,9 +28,6 @@ export const authService = {
     }
   },
 
-  /**
-   * Logout
-   */
   logout: async () => {
     try {
       localStorage.removeItem('userData');
@@ -58,43 +38,29 @@ export const authService = {
     }
   },
 
-  /**
-   * Obtener usuario desde localStorage
-   * @returns {object|null} User data
-   */
+  /** @returns {object|null} */
   getCurrentUser: () => {
     const userData = localStorage.getItem('userData');
     return userData ? JSON.parse(userData) : null;
   },
 
-  /**
-   * Obtener idUsuario desde localStorage
-   * @returns {number|null} User ID
-   */
+  /** @returns {number|null} */
   getUserId: () => {
     const idUsuario = localStorage.getItem('idUsuario');
     return idUsuario ? parseInt(idUsuario, 10) : null;
   },
 
-  /**
-   * Comprobar autenticacion
-   * @returns {boolean}
-   */
+  /** @returns {boolean} */
   isAuthenticated: () => {
     return !!localStorage.getItem('userData');
   },
 
-  /**
-   * Obtener rol del usuario
-   * @returns {string} 'admin' o 'empleado'
-   */
+  /** @returns {string} 'admin' o 'empleado' */
   getUserRole: () => {
     const userData = localStorage.getItem('userData');
     if (userData) {
       const parsed = JSON.parse(userData);
-      const usuario = parsed?.usuario;
-      const rol = usuario?.rol;
-      // El backend devuelve "Administrador" para admin
+      const rol = parsed?.usuario?.rol;
       if (rol && rol.toLowerCase() === 'administrador') {
         return 'admin';
       }
@@ -102,25 +68,19 @@ export const authService = {
     return 'empleado';
   },
 
-  /**
-   * Verificar si el usuario es admin
-   * @returns {boolean}
-   */
+  /** @returns {boolean} */
   isAdmin: () => {
     const userData = localStorage.getItem('userData');
     if (userData) {
       const parsed = JSON.parse(userData);
-      const usuario = parsed?.usuario;
-      const rol = usuario?.rol || usuario?.Rol;
-      // El backend devuelve "Administrador" para admin
+      const rol = parsed?.usuario?.rol || parsed?.usuario?.Rol;
       return rol && rol.toLowerCase() === 'administrador';
     }
     return false;
   },
 
   /**
-   * Registrar nuevo usuario
-   * @param {object} userData - User registration data
+   * @param {object} userData
    * @returns {Promise<object>}
    */
   register: async (userData) => {

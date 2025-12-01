@@ -1,13 +1,14 @@
 import { api } from './api';
 
 /**
- * Auditoria Service
- * Handles audit-related API operations
+ * Servicio de Auditoría.
+ * Gestiona operaciones de registros de auditoría con la API.
+ * @module auditoriaService
  */
 export const auditoriaService = {
   /**
-   * Todas las auditorias
-   * @returns {Promise<Array>} List of audit records
+   * Obtiene todos los registros de auditoría.
+   * @returns {Promise<Array>} Lista de registros de auditoría
    */
   getAllAudits: async () => {
     try {

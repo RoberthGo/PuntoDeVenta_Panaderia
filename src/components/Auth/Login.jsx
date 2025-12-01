@@ -1,12 +1,20 @@
 import { useState } from 'react';
 import './Login.css';
 
+/**
+ * Componente de inicio de sesión.
+ * @param {Object} props
+ * @param {Function} props.onLogin - Callback con las credenciales
+ * @param {string} props.error - Mensaje de error a mostrar
+ * @returns {JSX.Element}
+ */
 function Login({ onLogin, error }) {
   const [formData, setFormData] = useState({
     nombreUsuario: '',
     clave: ''
   });
 
+  /** @param {Event} e */
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -15,10 +23,9 @@ function Login({ onLogin, error }) {
     }));
   };
 
+  /** @param {Event} e */
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Login: ', formData);
-    // Call onLogin with form data
     onLogin(formData);
   };
 

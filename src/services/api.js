@@ -1,15 +1,20 @@
-// Base API configuration
-// Using relative path to leverage Vite proxy and avoid CORS issues
+/**
+ * Módulo de comunicación con la API del backend.
+ * Proporciona métodos HTTP (GET, POST, PUT, DELETE) con manejo de errores.
+ * @module api
+ */
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 /**
- * Mapeo de códigos HTTP a mensajes amigables en español
+ * Traduce códigos HTTP a mensajes amigables en español.
+ * @param {number} status - Código de estado HTTP
+ * @param {string} serverMessage - Mensaje del servidor (opcional)
+ * @returns {string} Mensaje de error legible
  */
 const getErrorMessage = (status, serverMessage) => {
-  // Si el servidor envió un mensaje, usarlo
   if (serverMessage) return serverMessage;
 
-  // Mensajes por defecto según código HTTP
   const errorMessages = {
     400: 'Datos inválidos. Por favor verifica la información.',
     401: 'Usuario o contraseña incorrectos.',
@@ -26,22 +31,19 @@ const getErrorMessage = (status, serverMessage) => {
 };
 
 /**
- * Generic fetch wrapper with error handling
- * @param {string} endpoint - API endpoint
- * @param {object} options - Fetch options
- * @returns {Promise} - Response data
+ * Realiza una petición HTTP a la API.
+ * @param {string} endpoint - Ruta del endpoint (ej: '/productos')
+ * @param {Object} options - Opciones de fetch (method, headers, body)
+ * @returns {Promise<Object>} Respuesta JSON del servidor
+ * @throws {Error} Error con mensaje amigable si la petición falla
  */
 const apiRequest = async (endpoint, options = {}) => {
   const url = `${API_BASE_URL}${endpoint}`;
 
-  const defaultHeaders = {
-    'Content-Type': 'application/json',
-  };
-
   const config = {
     ...options,
     headers: {
-      ...defaultHeaders,
+      'Content-Type': 'application/json',
       ...options.headers,
     },
   };
@@ -49,35 +51,28 @@ const apiRequest = async (endpoint, options = {}) => {
   try {
     const response = await fetch(url, config);
 
-    // Handle non-OK responses
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      console.error('API Error Response:', errorData);
-      // Buscar mensaje en 'mensaje' (español) o 'message' (inglés)
       const serverMessage = errorData.mensaje || errorData.message;
       throw new Error(getErrorMessage(response.status, serverMessage));
     }
 
-    // Parse JSON response
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    // Si es un error de red (no de HTTP)
     if (error.name === 'TypeError' && error.message === 'Failed to fetch') {
       throw new Error('No se puede conectar al servidor. Verifica tu conexión.');
     }
-    console.error('API Request Error:', error);
     throw error;
   }
 };
 
-/**
- * HTTP Methods
- */
+/** Objeto con métodos HTTP para comunicarse con la API */
 export const api = {
+  /** @param {string} endpoint @param {Object} options */
   get: (endpoint, options = {}) =>
     apiRequest(endpoint, { ...options, method: 'GET' }),
 
+  /** @param {string} endpoint @param {Object} body @param {Object} options */
   post: (endpoint, body, options = {}) =>
     apiRequest(endpoint, {
       ...options,
@@ -85,6 +80,7 @@ export const api = {
       body: JSON.stringify(body)
     }),
 
+  /** @param {string} endpoint @param {Object} body @param {Object} options */
   put: (endpoint, body, options = {}) =>
     apiRequest(endpoint, {
       ...options,
@@ -92,19 +88,18 @@ export const api = {
       body: JSON.stringify(body)
     }),
 
+  /** @param {string} endpoint @param {Object} options */
   delete: (endpoint, options = {}) =>
     apiRequest(endpoint, { ...options, method: 'DELETE' }),
 
+  /** @param {string} endpoint @param {FormData} formData @param {Object} options */
   postFormData: (endpoint, formData, options = {}) => {
     const url = `${API_BASE_URL}${endpoint}`;
-
     const config = {
       ...options,
       method: 'POST',
       body: formData,
-      headers: {
-        ...options.headers,
-      },
+      headers: { ...options.headers },
     };
 
     return fetch(url, config).then(async (response) => {
@@ -122,16 +117,14 @@ export const api = {
     });
   },
 
+  /** @param {string} endpoint @param {FormData} formData @param {Object} options */
   putFormData: (endpoint, formData, options = {}) => {
     const url = `${API_BASE_URL}${endpoint}`;
-
     const config = {
       ...options,
       method: 'PUT',
       body: formData,
-      headers: {
-        ...options.headers,
-      },
+      headers: { ...options.headers },
     };
 
     return fetch(url, config).then(async (response) => {

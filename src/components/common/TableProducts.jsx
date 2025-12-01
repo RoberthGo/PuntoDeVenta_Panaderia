@@ -1,8 +1,13 @@
 import React from 'react';
 import "../common/CSS/TableProducts.css";
 
-// Componente individual para mostrar un artículo de venta
-const SalesItemCard = ({ item , onRemove}) => {
+/**
+ * Tarjeta de item en el carrito de venta.
+ * @param {Object} props
+ * @param {Object} props.item - Producto en el carrito
+ * @param {Function} props.onRemove - Callback para remover del carrito
+ */
+const SalesItemCard = ({ item, onRemove }) => {
     const total = (item.precio * item.cantidad).toFixed(2);
 
     return (
@@ -47,13 +52,18 @@ const SalesItemCard = ({ item , onRemove}) => {
     );
 };
 
-// Componente principal del panel de resumen de ventas
+/**
+ * Panel de resumen de venta.
+ * Muestra los productos agregados al carrito con totales.
+ * @param {Object} props
+ * @param {Array} props.items - Lista de productos en el carrito
+ * @param {Function} props.onRemove - Callback para remover producto
+ * @param {Function} props.onFinalizeSale - Callback para finalizar venta
+ * @returns {JSX.Element}
+ */
 const SalesOrderPanel = ({ items = [], onRemove, onFinalizeSale }) => {
-
-    // Si no llegan items, prevenimos errores
     const safeItems = items || [];
 
-    // Calcular totales con los items reales
     const subtotal = safeItems.reduce((sum, item) => sum + item.precio * item.cantidad, 0);
     const tax = subtotal * 0.16;
     const finalTotal = subtotal + tax;

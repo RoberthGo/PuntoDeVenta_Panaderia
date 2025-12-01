@@ -1,13 +1,14 @@
 import { api } from './api';
 
 /**
- * Category Service
- * Handles category-related API operations
+ * Servicio de Categorías.
+ * Gestiona operaciones de categorías de productos con la API.
+ * @module categoryService
  */
 export const categoryService = {
   /**
-   * Get all categories
-   * @returns {Promise<Array>} List of categories
+   * Obtiene todas las categorías.
+   * @returns {Promise<Array>} Lista de categorías
    */
   getAllCategories: async () => {
     try {

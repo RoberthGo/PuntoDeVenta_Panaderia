@@ -2,6 +2,11 @@ import { useEffect, useState } from 'react';
 import { auditoriaService } from '../services/auditoria';
 import './CSS/AuditTablePage.css';
 
+/**
+ * Página de auditoría del sistema.
+ * Muestra el historial de cambios realizados en productos.
+ * @returns {JSX.Element}
+ */
 function AuditTablePage() {
     const [audits, setAudits] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -34,6 +39,7 @@ function AuditTablePage() {
         return () => { isMounted = false; };
     }, []);
 
+    /** @param {string} dateString - Fecha en formato ISO */
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('es-MX', {

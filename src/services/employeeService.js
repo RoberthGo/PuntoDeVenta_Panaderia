@@ -1,12 +1,13 @@
 import { api } from './api';
 
 /**
- * Servicio de Empleados
- * Handles employee-related API operations
+ * Servicio de Empleados.
+ * Gestiona operaciones CRUD de empleados con la API.
+ * @module employeeService
  */
 export const employeeService = {
   /**
-   * Obtiene todo los empleados
+   * Obtiene todos los empleados.
    * @returns {Promise<Array>} Lista de empleados
    */
   getAllEmployees: async () => {
@@ -20,9 +21,9 @@ export const employeeService = {
   },
 
   /**
-   * Get employee by ID
-   * @param {number} id - Employee ID
-   * @returns {Promise<object>} Employee data
+   * Obtiene un empleado por su ID.
+   * @param {number} id - ID del empleado
+   * @returns {Promise<Object>} Datos del empleado
    */
   getEmployeeById: async (id) => {
     try {
@@ -35,13 +36,16 @@ export const employeeService = {
   },
 
   /**
-   * Create new employee
-   * @param {object} employeeData - Employee data (nombre, telefono, rol, salario)
-   * @returns {Promise<object>} Created employee
+   * Crea un nuevo empleado.
+   * @param {Object} employeeData - Datos del empleado
+   * @param {string} employeeData.nombre - Nombre completo
+   * @param {string} employeeData.telefono - Teléfono
+   * @param {string} employeeData.rol - 'Empleado' o 'Administrador'
+   * @param {number} employeeData.salario - Salario
+   * @returns {Promise<Object>} Empleado creado
    */
   createEmployee: async (employeeData) => {
     try {
-      // Backend expects: nombre, telefono, rol, salario (no fechaIngreso)
       const { nombre, telefono, rol, salario } = employeeData;
       const response = await api.post('/Empleados', { nombre, telefono, rol, salario });
       return response;
@@ -52,23 +56,19 @@ export const employeeService = {
   },
 
   /**
-   * Actualizar empleado
-   * @param {object} employeeData - Updated employee data (nombre, telefono, rol, salario)
-   * @returns {Promise<object>} Empleado actualizado
+   * Actualiza un empleado existente.
+   * @param {Object} employeeData - Datos actualizados
+   * @param {number} employeeData.idEmpleado - ID del empleado
+   * @param {string} employeeData.nombre - Nombre completo
+   * @param {string} employeeData.telefono - Teléfono
+   * @param {string} employeeData.rol - 'Empleado' o 'Administrador'
+   * @param {number} employeeData.salario - Salario
+   * @returns {Promise<Object>} Empleado actualizado
    */
   updateEmployee: async (employeeData) => {
     try {
-      // Backend endpoint: /Empleados/ (no params in URL)
-      // Stored procedure uses: _id, _nombre, _telefono, _rol, _salario
       const { idEmpleado, nombre, telefono, rol, salario } = employeeData;
-      const payload = { 
-        idEmpleado, 
-        nombre, 
-        telefono, 
-        rol, 
-        salario 
-      };
-      console.log('Update Employee Payload:', JSON.stringify(payload, null, 2));
+      const payload = { idEmpleado, nombre, telefono, rol, salario };
       const response = await api.put('/Empleados/', payload);
       return response;
     } catch (error) {
@@ -78,9 +78,9 @@ export const employeeService = {
   },
 
   /**
-   * Delete employee
-   * @param {number} id - Employee ID
-   * @returns {Promise<object>}
+   * Elimina un empleado.
+   * @param {number} id - ID del empleado
+   * @returns {Promise<Object>} Respuesta del servidor
    */
   deleteEmployee: async (id) => {
     try {
