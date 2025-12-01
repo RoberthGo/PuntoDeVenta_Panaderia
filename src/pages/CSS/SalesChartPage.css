@@ -14,13 +14,142 @@
     letter-spacing: 2px;
 }
 
+/* Tabs Navigation */
+.tabs-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.tab-button {
+    flex: 1;
+    min-width: 250px;
+    padding: 1rem 2rem;
+    background-color: #0d0d0d;
+    border: 2px solid #8B4513;
+    border-radius: 12px 12px 0 0;
+    color: #f0f0f0;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab-button:hover {
+    background-color: rgba(139, 69, 19, 0.3);
+    border-color: #FFD700;
+}
+
+.tab-button.active {
+    background-color: #8B4513;
+    color: #FFD700;
+    border-color: #FFD700;
+}
+
+/* Section Container */
+.section-container {
+    background-color: #0d0d0d;
+    border-radius: 0 12px 12px 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.section-title {
+    color: #FFD700;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid rgba(139, 69, 19, 0.5);
+}
+
 /* Filters Section */
 .filters-section {
-    background-color: #0d0d0d;
-    padding: 2rem;
+    background-color: rgba(139, 69, 19, 0.1);
+    padding: 1.5rem;
     border-radius: 12px;
     margin-bottom: 2rem;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(139, 69, 19, 0.3);
+}
+
+/* Date Selectors for Range Report */
+.date-selectors {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.date-input {
+    flex: 1;
+    min-width: 200px;
+}
+
+.date-input label {
+    display: block;
+    color: #FFD700;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.date-input input[type="date"] {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #1a1a1a;
+    border: 2px solid #8B4513;
+    border-radius: 8px;
+    color: #f0f0f0;
+    font-size: 1rem;
+}
+
+.date-input input[type="date"]:focus {
+    outline: none;
+    border-color: #FFD700;
+}
+
+/* Rango Info */
+.rango-info {
+    display: flex;
+    gap: 2rem;
+    padding: 1rem;
+    background-color: rgba(139, 69, 19, 0.15);
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.rango-info p {
+    margin: 0;
+    color: #f0f0f0;
+}
+
+.rango-info strong {
+    color: #FFD700;
+}
+
+/* Rango Table specific styles */
+.rango-table th:nth-child(3),
+.rango-table td:nth-child(3) {
+    text-align: center;
+}
+
+.sales-comparison-table td.centered {
+    text-align: center;
+}
+
+/* Empty message */
+.empty-message {
+    text-align: center;
+    padding: 2rem;
+    color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
 }
 
 .month-selectors {
@@ -228,7 +357,8 @@
     flex-direction: column;
     align-items: center;
     flex: 1;
-    max-width: 120px;
+    max-width: 150px;
+    min-width: 80px;
 }
 
 .bars {
@@ -240,6 +370,15 @@
     justify-content: center;
 }
 
+.bars-two {
+    gap: 0.5rem;
+}
+
+.bars-two .bar {
+    min-width: 40px;
+    max-width: 60px;
+}
+
 .bar {
     flex: 1;
     min-width: 20px;
@@ -247,11 +386,32 @@
     border-radius: 4px 4px 0 0;
     transition: all 0.3s;
     cursor: pointer;
+    position: relative;
+    min-height: 4px;
 }
 
 .bar:hover {
-    opacity: 0.8;
-    transform: scaleY(1.05);
+    opacity: 0.85;
+    transform: scaleY(1.02);
+}
+
+.bar-value {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.7rem;
+    color: #f0f0f0;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.bar:hover .bar-value {
+    opacity: 1;
 }
 
 .bar-price {
@@ -259,11 +419,11 @@
 }
 
 .bar-month1 {
-    background-color: #f97316;
+    background: linear-gradient(180deg, #fb923c 0%, #f97316 100%);
 }
 
 .bar-month2 {
-    background-color: #22c55e;
+    background: linear-gradient(180deg, #4ade80 0%, #22c55e 100%);
 }
 
 .bar-label {
@@ -272,6 +432,16 @@
     color: #f0f0f0;
     font-size: 0.85rem;
     word-break: break-word;
+    max-width: 100%;
+}
+
+.bar-product-name {
+    font-size: 0.8rem;
+    line-height: 1.2;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .product-id {
@@ -309,6 +479,23 @@
 }
 
 .legend-month2 {
+    background-color: #22c55e;
+}
+
+/* Barras para Reporte por Rango */
+.bar-unidades {
+    background-color: #a855f7;
+}
+
+.bar-monto {
+    background-color: #22c55e;
+}
+
+.legend-unidades {
+    background-color: #a855f7;
+}
+
+.legend-monto {
     background-color: #22c55e;
 }
 

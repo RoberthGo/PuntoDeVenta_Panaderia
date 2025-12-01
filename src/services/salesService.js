@@ -64,7 +64,7 @@ export const salesService = {
    */
   getReporteMensual: async (month, year, ids = []) => {
     try {
-      let endpoint = `/Ventas/ReporteMensual?mes=${month}&anio=${year}&ids=${ids}`;
+      let endpoint = `/Ventas/ReporteMensual?mes=${month}&anio=${year}`;
 
       if (ids && ids.length > 0) {
         endpoint += `&ids=${ids.join(',')}`;
