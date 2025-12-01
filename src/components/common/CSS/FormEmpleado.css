@@ -119,3 +119,42 @@ select {
     appearance: none;
     cursor: pointer;
 }
+
+/* ==================== VALIDATION STYLES ==================== */
+
+/* Input con error */
+.input-error,
+input.input-error,
+select.input-error,
+textarea.input-error {
+    border-color: #f44336 !important;
+    background-color: rgba(244, 67, 54, 0.1) !important;
+}
+
+.input-error:focus {
+    border-color: #f44336 !important;
+    box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.3) !important;
+}
+
+/* Texto de error */
+.error-text {
+    display: block;
+    color: #f44336;
+    font-size: 0.8rem;
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+/* Contador de caracteres */
+.char-count {
+    display: block;
+    color: #888;
+    font-size: 0.75rem;
+    margin-top: 3px;
+    text-align: right;
+}
+
+/* Asterisco para campos requeridos */
+.form-label::after {
+    content: '';
+}

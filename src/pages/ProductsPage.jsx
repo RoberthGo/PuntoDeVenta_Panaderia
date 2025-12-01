@@ -26,6 +26,81 @@ function ProductsPage() {
     });
     const [imagePreview, setImagePreview] = useState('');
     const [saving, setSaving] = useState(false);
+    const [validationErrors, setValidationErrors] = useState({});
+
+    // Constantes de validación basadas en la BD
+    const VALIDATION = {
+        nombre: { maxLength: 100, required: true },
+        descripcion: { maxLength: 200, required: false },
+        precio: { min: 0, max: 99999999.99, required: true },
+        costo: { min: 0, max: 99999999.99, required: true },
+        stock: { min: 0, max: 2147483647, required: true },
+        reorderLevel: { min: 0, max: 2147483647, required: true },
+        categoria: { required: true }
+    };
+
+    // Función de validación
+    const validateForm = () => {
+        const errors = {};
+        
+        // Validar nombre
+        if (!formData.nombre.trim()) {
+            errors.nombre = 'El nombre es obligatorio';
+        } else if (formData.nombre.length > VALIDATION.nombre.maxLength) {
+            errors.nombre = `Máximo ${VALIDATION.nombre.maxLength} caracteres`;
+        }
+        
+        // Validar descripción
+        if (formData.descripcion && formData.descripcion.length > VALIDATION.descripcion.maxLength) {
+            errors.descripcion = `Máximo ${VALIDATION.descripcion.maxLength} caracteres`;
+        }
+        
+        // Validar precio
+        const precio = parseFloat(formData.precio);
+        if (!formData.precio && formData.precio !== 0) {
+            errors.precio = 'El precio es obligatorio';
+        } else if (isNaN(precio) || precio < VALIDATION.precio.min) {
+            errors.precio = 'El precio debe ser un número positivo';
+        } else if (precio > VALIDATION.precio.max) {
+            errors.precio = 'El precio excede el límite permitido';
+        }
+        
+        // Validar costo
+        const costo = parseFloat(formData.costo);
+        if (!formData.costo && formData.costo !== 0) {
+            errors.costo = 'El costo es obligatorio';
+        } else if (isNaN(costo) || costo < VALIDATION.costo.min) {
+            errors.costo = 'El costo debe ser un número positivo';
+        } else if (costo > VALIDATION.costo.max) {
+            errors.costo = 'El costo excede el límite permitido';
+        }
+        
+        // Validar stock
+        const stock = parseInt(formData.stock);
+        if (formData.stock === '' || formData.stock === null) {
+            errors.stock = 'El stock es obligatorio';
+        } else if (isNaN(stock) || stock < VALIDATION.stock.min) {
+            errors.stock = 'El stock debe ser un número entero positivo';
+        } else if (stock > VALIDATION.stock.max) {
+            errors.stock = 'El stock excede el límite permitido';
+        }
+        
+        // Validar nivel de reorden
+        const reorderLevel = parseInt(formData.reorderLevel);
+        if (formData.reorderLevel === '' || formData.reorderLevel === null) {
+            errors.reorderLevel = 'El nivel de reorden es obligatorio';
+        } else if (isNaN(reorderLevel) || reorderLevel < VALIDATION.reorderLevel.min) {
+            errors.reorderLevel = 'El nivel de reorden debe ser un número entero positivo';
+        }
+        
+        // Validar categoría
+        if (!formData.categoria) {
+            errors.categoria = 'Selecciona una categoría';
+        }
+        
+        setValidationErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
 
     const fetchProducts = async () => {
         try {
@@ -167,6 +242,12 @@ function ProductsPage() {
     // Submit form (create or update)
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        // Validar antes de enviar
+        if (!validateForm()) {
+            return;
+        }
+        
         setSaving(true);
 
         const formDataToSend = new FormData();
@@ -270,41 +351,48 @@ function ProductsPage() {
                         <h2>{editingProduct ? 'Editar Producto' : 'Nuevo Producto'}</h2>
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
-                                <label htmlFor="nombre">Nombre</label>
+                                <label htmlFor="nombre">Nombre *</label>
                                 <input
                                     type="text"
                                     id="nombre"
                                     name="nombre"
                                     value={formData.nombre}
                                     onChange={handleInputChange}
-                                    required
+                                    maxLength={100}
+                                    className={validationErrors.nombre ? 'input-error' : ''}
                                 />
+                                {validationErrors.nombre && <span className="error-text">{validationErrors.nombre}</span>}
+                                <small className="char-count">{formData.nombre.length}/100</small>
                             </div>
                             <div className="form-group">
-                                <label htmlFor="precio">Precio</label>
+                                <label htmlFor="precio">Precio *</label>
                                 <input
                                     type="number"
                                     id="precio"
                                     name="precio"
                                     step="0.01"
                                     min="0"
+                                    max="99999999.99"
                                     value={formData.precio}
                                     onChange={handleInputChange}
-                                    required
+                                    className={validationErrors.precio ? 'input-error' : ''}
                                 />
+                                {validationErrors.precio && <span className="error-text">{validationErrors.precio}</span>}
                             </div>
                             <div className="form-group">
-                                <label htmlFor="costo">Costo</label>
+                                <label htmlFor="costo">Costo *</label>
                                 <input
                                     type="number"
                                     id="costo"
                                     name="costo"
                                     step="0.01"
                                     min="0"
+                                    max="99999999.99"
                                     value={formData.costo}
                                     onChange={handleInputChange}
-                                    required
+                                    className={validationErrors.costo ? 'input-error' : ''}
                                 />
+                                {validationErrors.costo && <span className="error-text">{validationErrors.costo}</span>}
                             </div>
                             <div className="form-group">
                                 <label htmlFor="descripcion">Descripción</label>
@@ -314,10 +402,14 @@ function ProductsPage() {
                                     value={formData.descripcion}
                                     onChange={handleInputChange}
                                     rows="3"
+                                    maxLength={200}
+                                    className={validationErrors.descripcion ? 'input-error' : ''}
                                 />
+                                {validationErrors.descripcion && <span className="error-text">{validationErrors.descripcion}</span>}
+                                <small className="char-count">{formData.descripcion.length}/200</small>
                             </div>
                             <div className="form-group">
-                                <label htmlFor="stock">Stock</label>
+                                <label htmlFor="stock">Stock *</label>
                                 <input
                                     type="number"
                                     id="stock"
@@ -325,11 +417,12 @@ function ProductsPage() {
                                     min="0"
                                     value={formData.stock}
                                     onChange={handleInputChange}
-                                    required
+                                    className={validationErrors.stock ? 'input-error' : ''}
                                 />
+                                {validationErrors.stock && <span className="error-text">{validationErrors.stock}</span>}
                             </div>
                             <div className="form-group">
-                                <label htmlFor="reorderLevel">Nivel de Reorden</label>
+                                <label htmlFor="reorderLevel">Nivel de Reorden *</label>
                                 <input
                                     type="number"
                                     id="reorderLevel"
@@ -337,18 +430,18 @@ function ProductsPage() {
                                     min="0"
                                     value={formData.reorderLevel}
                                     onChange={handleInputChange}
-                                    required
+                                    className={validationErrors.reorderLevel ? 'input-error' : ''}
                                 />
+                                {validationErrors.reorderLevel && <span className="error-text">{validationErrors.reorderLevel}</span>}
                             </div>
                             <div className="form-group">
-                                <label htmlFor="categoria">Categoría</label>
+                                <label htmlFor="categoria">Categoría *</label>
                                 <select
                                     id="categoria"
                                     name="categoria"
                                     value={formData.categoria}
                                     onChange={handleInputChange}
-                                    required
-                                    className="form-select"
+                                    className={`form-select ${validationErrors.categoria ? 'input-error' : ''}`}
                                 >
                                     <option value="" disabled>
                                         Selecciona una categoría
@@ -359,6 +452,7 @@ function ProductsPage() {
                                         </option>
                                     ))}
                                 </select>
+                                {validationErrors.categoria && <span className="error-text">{validationErrors.categoria}</span>}
                             </div>
                             <div className="form-group">
                                 <label htmlFor="imageFile">Imagen del Producto (opcional)</label>

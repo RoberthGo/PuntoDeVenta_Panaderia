@@ -154,6 +154,49 @@
     min-height: 80px;
 }
 
+/* Validation Styles */
+.input-error {
+    border-color: #f44336 !important;
+    background-color: rgba(244, 67, 54, 0.1) !important;
+}
+
+.error-text {
+    display: block;
+    color: #f44336;
+    font-size: 0.8em;
+    margin-top: 5px;
+}
+
+.char-count {
+    display: block;
+    color: #888;
+    font-size: 0.75em;
+    margin-top: 3px;
+    text-align: right;
+}
+
+.form-select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #444;
+    border-radius: 6px;
+    background-color: #333;
+    color: white;
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+    cursor: pointer;
+}
+
+.form-select:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+.form-select.input-error {
+    border-color: #f44336 !important;
+}
+
 .modal-actions {
     display: flex;
     gap: 15px;

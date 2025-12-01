@@ -4,6 +4,7 @@ import Table from "../components/common/TableProducts";
 import "./CSS/SalesPage.css";
 import { productService } from "../services/productService";
 import { salesService } from "../services/salesService";
+import { authService } from "../services/authService";
 
 import img1 from "../Images/img-1.jpg";
 
@@ -124,10 +125,33 @@ function Main() {
             return;
         }
 
+        // Validar que hay un empleado autenticado
+        const idEmpleado = authService.getUserId();
+        if (!idEmpleado) {
+            alert('Error: No se pudo identificar al empleado. Por favor, inicia sesión nuevamente.');
+            return;
+        }
+
+        // Validar que todos los productos tengan datos válidos
+        for (const item of cartItems) {
+            if (!item.idProducto || item.idProducto <= 0) {
+                alert('Error: Producto inválido en el carrito.');
+                return;
+            }
+            if (!item.cantidad || item.cantidad <= 0) {
+                alert('Error: Cantidad inválida para el producto ' + item.nombre);
+                return;
+            }
+            if (!item.precio || item.precio <= 0) {
+                alert('Error: Precio inválido para el producto ' + item.nombre);
+                return;
+            }
+        }
+
         try {
             // Transformar cartItems al formato requerido por la API
             const saleData = {
-                idEmpleado: 1, // TODO: Obtener del contexto de autenticación
+                idEmpleado: idEmpleado,
                 productos: cartItems.map(item => ({
                     idProducto: item.idProducto,
                     cantidad: item.cantidad,
