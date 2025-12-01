@@ -12,7 +12,7 @@ import SalesHistoryPage from "./SalesHistoryPage";
 import AuditTablePage from "./AuditTablePage";
 import SalesChartPage from "./SalesChartPage";
 
-function Main() {
+function Main({ onLogout }) {
     const [selectedPage, setSelectedPage] = useState("Ventas");
 
     // Esta función recibe el pageName desde el Sidebar
@@ -36,7 +36,7 @@ function Main() {
         <div className="dashboard-layout-container">
 
             {/* Sidebar manda a llamar handleSelectPage */}
-            <Sidebar onSelectPage={handleSelectPage} />
+            <Sidebar onSelectPage={handleSelectPage} onLogout={onLogout} />
 
             {/* Aquí se carga la página que toque */}
             <MainContent>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './CSS/Sidebar.css';
 
-function Sidebar({ onSelectPage }) {
+function Sidebar({ onSelectPage, onLogout }) {
 
     const [activeItem, setActiveItem] = useState("Ventas");
 
@@ -64,6 +64,13 @@ function Sidebar({ onSelectPage }) {
                 </li>
 
             </ul>
+
+            <div className="sidebar-footer">
+                <button className="logout-btn" onClick={onLogout}>
+                    <span className="nav-icon">🚪</span>
+                    Cerrar Sesión
+                </button>
+            </div>
         </nav>
     );
 }

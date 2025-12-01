@@ -52,7 +52,8 @@
 .audit-table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 800px;
+    min-width: 900px;
+    table-layout: auto;
 }
 
 .audit-table thead {
@@ -87,13 +88,15 @@
     padding: 1rem;
     color: #f0f0f0;
     font-size: 0.95rem;
+    vertical-align: top;
 }
 
 .details-cell {
-    max-width: 300px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    max-width: 350px;
+    word-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+    line-height: 1.4;
 }
 
 .action-badge {

@@ -1,13 +1,34 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import Login from './components/Auth/Login'
 import Main from './pages/Main'
 import { authService } from './services'
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [userData, setUserData] = useState(null)
+  // Inicializar estados con datos de localStorage si existen
+  const [isAuthenticated, setIsAuthenticated] = useState(() => authService.isAuthenticated())
+  const [userData, setUserData] = useState(() => authService.getCurrentUser())
   const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  // Verificar sesión al cargar la aplicación
+  useEffect(() => {
+    const checkSession = () => {
+      const isAuth = authService.isAuthenticated()
+      const storedUser = authService.getCurrentUser()
+      
+      if (isAuth && storedUser) {
+        setIsAuthenticated(true)
+        setUserData(storedUser)
+      } else {
+        setIsAuthenticated(false)
+        setUserData(null)
+      }
+      setLoading(false)
+    }
+
+    checkSession()
+  }, [])
 
   const handleLogin = async (loginData) => {
     try {
@@ -37,6 +58,16 @@ function App() {
     } catch (error) {
       console.error('Logout error:', error)
     }
+  }
+
+  // Mostrar loading mientras se verifica la sesión
+  if (loading) {
+    return (
+      <div className="app loading-screen">
+        <div className="loading-spinner"></div>
+        <p>Cargando...</p>
+      </div>
+    )
   }
 
   return (

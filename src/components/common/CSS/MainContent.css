@@ -11,10 +11,12 @@
 }
 
 .page-section {
-    width: 80vw; 
+    width: 100%; 
+    min-width: 0;
     height: 100%;
     flex-shrink: 0;
-    overflow-y: auto; 
+    overflow-y: auto;
+    overflow-x: hidden;
     padding: 30px;
     box-sizing: border-box;
 }
