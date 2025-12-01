@@ -36,51 +36,6 @@ export const salesService = {
   },
 
   /**
-   * Get sales history
-   * @param {string} startDate - Start date (YYYY-MM-DD)
-   * @param {string} endDate - End date (YYYY-MM-DD)
-   * @returns {Promise<Array>} Sales history
-   */
-  getSalesHistory: async (startDate, endDate) => {
-    try {
-      const response = await api.get(`/sales/history?startDate=${startDate}&endDate=${endDate}`);
-      return response;
-    } catch (error) {
-      console.error('Error fetching sales history:', error);
-      throw error;
-    }
-  },
-
-  /**
-   * Get sales statistics
-   * @returns {Promise<object>} Sales statistics
-   */
-  getSalesStats: async () => {
-    try {
-      const response = await api.get('/sales/stats');
-      return response;
-    } catch (error) {
-      console.error('Error fetching sales statistics:', error);
-      throw error;
-    }
-  },
-
-  /**
-   * Cancel sale
-   * @param {number} id - Sale ID
-   * @returns {Promise<object>}
-   */
-  cancelSale: async (id) => {
-    try {
-      const response = await api.post(`/sales/${id}/cancel`);
-      return response;
-    } catch (error) {
-      console.error(`Error canceling sale ${id}:`, error);
-      throw error;
-    }
-  },
-
-  /**
    * Get sales report by date range and product IDs
    * @param {string} inicio - Start date (YYYY-MM-DD)
    * @param {string} fin - End date (YYYY-MM-DD)
@@ -100,6 +55,25 @@ export const salesService = {
       return response;
     } catch (error) {
       console.error('Error fetching sales report by range:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Obtener reporte de ventas de un mes
+   */
+  getReporteMensual: async (month, year, ids = []) => {
+    try {
+      let endpoint = `/Ventas/ReporteMensual?mes=${month}&anio=${year}&ids=${ids}`;
+      
+      if (ids && ids.length > 0) {
+        endpoint += `&ids=${ids.join(',')}`;
+      }
+      
+      const response = await api.get(endpoint);
+      return response;
+    } catch (error) {
+      console.error('Error fetching monthly sales report:', error);
       throw error;
     }
   },
