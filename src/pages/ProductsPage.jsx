@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import ProductCard from "../components/common/ProductCard";
 import './CSS/ProductsPage.css';
 import { productService } from "../services/productService";
+import { categoryService } from "../services/categoryService";
 import img1 from "../Images/img-1.jpg";
 
 function ProductsPage() {
     const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     
@@ -17,8 +19,12 @@ function ProductsPage() {
         precio: '',
         descripcion: '',
         stock: '',
-        imageUrl: ''
+        categoria: '',
+        costo: '',
+        reorderLevel: '',
+        imageFile: null
     });
+    const [imagePreview, setImagePreview] = useState('');
     const [saving, setSaving] = useState(false);
 
     const fetchProducts = async () => {
@@ -26,10 +32,35 @@ function ProductsPage() {
             setLoading(true);
             setError(null);
             const data = await productService.getAllProducts();
-            const withImages = (Array.isArray(data) ? data : []).map(p => ({
-                ...p,
-                imageUrl: p.imageUrl || img1,
-            }));
+            const withImages = (Array.isArray(data) ? data : []).map(p => {
+                let imageUrl = img1; // Default image
+                
+                // Handle different image formats from backend
+                if (p.imagen) {
+                    // If imagen is a byte array or base64 string
+                    if (typeof p.imagen === 'string' && p.imagen.startsWith('data:image')) {
+                        imageUrl = p.imagen;
+                    } else if (typeof p.imagen === 'string') {
+                        // Assume it's base64 without prefix
+                        imageUrl = `data:image/jpeg;base64,${p.imagen}`;
+                    }
+                } else if (p.imagenBase64) {
+                    // If backend sends imagenBase64 field
+                    if (p.imagenBase64.startsWith('data:image')) {
+                        imageUrl = p.imagenBase64;
+                    } else {
+                        imageUrl = `data:image/jpeg;base64,${p.imagenBase64}`;
+                    }
+                } else if (p.imageUrl) {
+                    // If backend sends imageUrl field
+                    imageUrl = p.imageUrl;
+                }
+                
+                return {
+                    ...p,
+                    imageUrl: imageUrl,
+                };
+            });
             setProducts(withImages);
         } catch (err) {
             console.error('Failed to load products:', err);
@@ -39,8 +70,18 @@ function ProductsPage() {
         }
     };
 
+    const fetchCategories = async () => {
+        try {
+            const data = await categoryService.getAllCategories();
+            setCategories(Array.isArray(data) ? data : []);
+        } catch (err) {
+            console.error('Failed to load categories:', err);
+        }
+    };
+
     useEffect(() => {
         fetchProducts();
+        fetchCategories();
     }, []);
 
     // Reset form
@@ -50,8 +91,12 @@ function ProductsPage() {
             precio: '',
             descripcion: '',
             stock: '',
-            imageUrl: ''
+            categoria: '',
+            costo: '',
+            reorderLevel: '',
+            imageFile: null
         });
+        setImagePreview('');
         setEditingProduct(null);
     };
 
@@ -69,8 +114,31 @@ function ProductsPage() {
             precio: product.precio || '',
             descripcion: product.descripcion || '',
             stock: product.stock || '',
-            imageUrl: product.imageUrl || ''
+            categoria: product.idCategoria || product.categoria || '',
+            costo: product.costo || '',
+            reorderLevel: product.reorderLevel || '',
+            imageFile: null
         });
+        
+        // Set image preview from existing product image
+        let preview = '';
+        if (product.imagen) {
+            if (typeof product.imagen === 'string' && product.imagen.startsWith('data:image')) {
+                preview = product.imagen;
+            } else if (typeof product.imagen === 'string') {
+                preview = `data:image/jpeg;base64,${product.imagen}`;
+            }
+        } else if (product.imagenBase64) {
+            if (product.imagenBase64.startsWith('data:image')) {
+                preview = product.imagenBase64;
+            } else {
+                preview = `data:image/jpeg;base64,${product.imagenBase64}`;
+            }
+        } else if (product.imageUrl && product.imageUrl !== img1) {
+            preview = product.imageUrl;
+        }
+        
+        setImagePreview(preview);
         setShowModal(true);
     };
 
@@ -101,21 +169,32 @@ function ProductsPage() {
         e.preventDefault();
         setSaving(true);
 
-        const productData = {
-            nombre: formData.nombre,
-            precio: parseFloat(formData.precio),
-            descripcion: formData.descripcion,
-            stock: parseInt(formData.stock, 10),
-            imageUrl: formData.imageUrl || null
-        };
+        const formDataToSend = new FormData();
+        formDataToSend.append('nombre', formData.nombre);
+        formDataToSend.append('precio', formData.precio);
+        formDataToSend.append('descripcion', formData.descripcion);
+        formDataToSend.append('stock', formData.stock);
+        formDataToSend.append('idCategoria', formData.categoria); // Backend expects idCategoria
+        formDataToSend.append('costo', formData.costo);
+        formDataToSend.append('reorderLevel', formData.reorderLevel);
+        
+        // Send imagenArchivo - backend requires this parameter
+        if (formData.imageFile) {
+            formDataToSend.append('imagenArchivo', formData.imageFile);
+        } else {
+            // Send empty file with proper filename to satisfy backend validation
+            const emptyFile = new File([], 'empty.txt', { type: 'text/plain' });
+            formDataToSend.append('imagenArchivo', emptyFile);
+        }
 
         try {
             if (editingProduct) {
-                // Update
-                await productService.updateProduct(editingProduct.idProducto, productData);
+                // Update - add idProducto to FormData
+                formDataToSend.append('idProducto', editingProduct.idProducto);
+                await productService.updateProduct(editingProduct.idProducto, formDataToSend);
             } else {
                 // Create
-                await productService.createProduct(productData);
+                await productService.createProduct(formDataToSend);
             }
             setShowModal(false);
             resetForm();
@@ -215,6 +294,19 @@ function ProductsPage() {
                                 />
                             </div>
                             <div className="form-group">
+                                <label htmlFor="costo">Costo</label>
+                                <input
+                                    type="number"
+                                    id="costo"
+                                    name="costo"
+                                    step="0.01"
+                                    min="0"
+                                    value={formData.costo}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
                                 <label htmlFor="descripcion">Descripción</label>
                                 <textarea
                                     id="descripcion"
@@ -237,15 +329,68 @@ function ProductsPage() {
                                 />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="imageUrl">URL de Imagen (opcional)</label>
+                                <label htmlFor="reorderLevel">Nivel de Reorden</label>
                                 <input
-                                    type="text"
-                                    id="imageUrl"
-                                    name="imageUrl"
-                                    value={formData.imageUrl}
+                                    type="number"
+                                    id="reorderLevel"
+                                    name="reorderLevel"
+                                    min="0"
+                                    value={formData.reorderLevel}
                                     onChange={handleInputChange}
-                                    placeholder="https://..."
+                                    required
                                 />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="categoria">Categoría</label>
+                                <select
+                                    id="categoria"
+                                    name="categoria"
+                                    value={formData.categoria}
+                                    onChange={handleInputChange}
+                                    required
+                                    className="form-select"
+                                >
+                                    <option value="" disabled>
+                                        Selecciona una categoría
+                                    </option>
+                                    {categories.map((cat) => (
+                                        <option key={cat.idCategoria} value={cat.idCategoria}>
+                                            {cat.nombre}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="imageFile">Imagen del Producto (opcional)</label>
+                                <input
+                                    type="file"
+                                    id="imageFile"
+                                    name="imageFile"
+                                    accept="image/*"
+                                    onChange={(e) => {
+                                        const file = e.target.files[0];
+                                        if (file) {
+                                            setFormData(prev => ({
+                                                ...prev,
+                                                imageFile: file
+                                            }));
+                                            const reader = new FileReader();
+                                            reader.onloadend = () => {
+                                                setImagePreview(reader.result);
+                                            };
+                                            reader.readAsDataURL(file);
+                                        }
+                                    }}
+                                />
+                                {imagePreview && (
+                                    <div style={{ marginTop: '10px' }}>
+                                        <img 
+                                            src={imagePreview} 
+                                            alt="Preview" 
+                                            style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'cover', borderRadius: '8px' }}
+                                        />
+                                    </div>
+                                )}
                             </div>
                             <div className="modal-actions">
                                 <button 

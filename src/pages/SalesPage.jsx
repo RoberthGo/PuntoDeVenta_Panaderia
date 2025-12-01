@@ -20,10 +20,35 @@ function Main() {
                 setLoading(true);
                 setError(null);
                 const data = await productService.getAllProducts();
-                const withImages = (Array.isArray(data) ? data : []).map(p => ({
-                    ...p,
-                    imageUrl: p.imageUrl || img1,
-                }));
+                const withImages = (Array.isArray(data) ? data : []).map(p => {
+                    let imageUrl = img1; // Default image
+                    
+                    // Handle different image formats from backend
+                    if (p.imagen) {
+                        // If imagen is a byte array or base64 string
+                        if (typeof p.imagen === 'string' && p.imagen.startsWith('data:image')) {
+                            imageUrl = p.imagen;
+                        } else if (typeof p.imagen === 'string') {
+                            // Assume it's base64 without prefix
+                            imageUrl = `data:image/jpeg;base64,${p.imagen}`;
+                        }
+                    } else if (p.imagenBase64) {
+                        // If backend sends imagenBase64 field
+                        if (p.imagenBase64.startsWith('data:image')) {
+                            imageUrl = p.imagenBase64;
+                        } else {
+                            imageUrl = `data:image/jpeg;base64,${p.imagenBase64}`;
+                        }
+                    } else if (p.imageUrl) {
+                        // If backend sends imageUrl field
+                        imageUrl = p.imageUrl;
+                    }
+                    
+                    return {
+                        ...p,
+                        imageUrl: imageUrl,
+                    };
+                });
                 if (isMounted) setProductos(withImages);
             } catch (err) {
                 console.error('Failed to load products for SalesPage:', err);
